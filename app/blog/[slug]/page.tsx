@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { blogPosts, getBlogPost, getRelatedPosts } from "../../lib/blogData";
+import { getBlogPostBySlug, getAllBlogSlugs, getRelatedBlogPosts } from "../../../lib/sanity/queries";
+import type { SanityBlogPostCard } from "../../../lib/sanity/queries";
 
-/* ─── Static params ──────────────────────────────────────── */
-export function generateStaticParams() {
-  return blogPosts.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 const categoryColors: Record<string, { bg: string; text: string }> = {
@@ -15,13 +16,12 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
   "documents-news": { bg: "#efd536", text: "#292929" },
 };
 
-/* ─── Related Blog Card ──────────────────────────────────── */
-function RelatedCard({ slug, type, readTime, date, title, excerpt, img }: ReturnType<typeof getRelatedPosts>[0]) {
+function RelatedCard({ slug, postType, readTime, publishedDate, title, excerpt, image }: SanityBlogPostCard) {
   return (
     <Link href={`/blog/${slug}`} className="bg-[#f4f4f4] rounded-2xl flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative shrink-0" style={{ height: "clamp(180px, 22vw, 300px)" }}>
         <div className="absolute inset-[11px_11px_0]">
-          <img src={img} alt="" className="w-full h-full" />
+          <img src={image} alt="" className="w-full h-full" />
         </div>
         <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
@@ -29,7 +29,7 @@ function RelatedCard({ slug, type, readTime, date, title, excerpt, img }: Return
             className="flex items-center bg-white/90 backdrop-blur-sm text-[#444] uppercase font-medium px-3 py-1.5 rounded-full"
             style={{ fontSize: "clamp(10px, 0.8vw, 12px)", letterSpacing: "0.05em" }}
           >
-            {type}
+            {postType}
           </span>
         </div>
       </div>
@@ -37,7 +37,7 @@ function RelatedCard({ slug, type, readTime, date, title, excerpt, img }: Return
         <div className="flex items-center gap-3 text-[#505050]">
           <span className="uppercase tracking-[-0.02em]" style={{ fontSize: "clamp(10px, 0.8vw, 12px)" }}>{readTime}</span>
           <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0" />
-          <span className="uppercase tracking-[-0.02em]" style={{ fontSize: "clamp(10px, 0.8vw, 12px)" }}>{date}</span>
+          <span className="uppercase tracking-[-0.02em]" style={{ fontSize: "clamp(10px, 0.8vw, 12px)" }}>{publishedDate}</span>
         </div>
         <div className="flex flex-col gap-2 flex-1">
           <h3 className="font-display text-[#292929] leading-tight tracking-[-0.04em]" style={{ fontSize: "clamp(17px, 2vw, 26px)" }}>{title}</h3>
@@ -52,14 +52,16 @@ function RelatedCard({ slug, type, readTime, date, title, excerpt, img }: Return
   );
 }
 
-/* ─── Page ──────────────────────────────────────────────── */
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const [post, related] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getRelatedBlogPosts(slug, 3),
+  ]);
+
   if (!post) notFound();
 
-  const related = getRelatedPosts(slug, 3);
-  const colors = categoryColors[post.category];
+  const colors = categoryColors[post.category] ?? { bg: "#ccbaf8", text: "#292929" };
 
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">
@@ -73,7 +75,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             style={{ backgroundColor: colors.bg }}
           >
             <span className="font-medium tracking-wide uppercase" style={{ color: colors.text, fontSize: "clamp(10px, 0.8vw, 13px)" }}>
-              {post.type}
+              {post.postType}
             </span>
           </div>
           <div
@@ -93,7 +95,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <div className="flex flex-wrap items-center gap-3 text-[#505050]" style={{ fontSize: "clamp(11px, 0.85vw, 15px)" }}>
               <span className="uppercase">{post.readTime}</span>
               <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0" />
-              <span className="uppercase">{post.date}</span>
+              <span className="uppercase">{post.publishedDate}</span>
             </div>
           </div>
         </div>
@@ -102,8 +104,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       {/* ── Article ────────────────────────────────────────── */}
       <div className="px-5 sm:px-10 lg:px-20 max-w-[1920px] mx-auto mt-16 md:mt-24">
         <div className="max-w-[760px] mx-auto">
-
-          {/* Lead */}
           <p
             className="text-[#232323] leading-[1.7] tracking-[-0.02em] mb-12 md:mb-16"
             style={{ fontSize: "clamp(15px, 1.15vw, 20px)" }}
@@ -111,13 +111,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             {post.lead}
           </p>
 
-          {/* Folder image */}
           <div
             className="relative rounded-[20px] overflow-hidden mb-12 md:mb-16"
             style={{ height: "clamp(200px, 28vw, 460px)" }}
           >
             <div className="absolute inset-[14px_14px_0]">
-              <img src={post.img} alt="" className="w-full h-full" />
+              <img src={post.image} alt="" className="w-full h-full" />
             </div>
             <div className="absolute top-[24px] inset-x-[24px] bottom-[56px] bg-white rounded-2xl" />
             <div className="absolute bottom-[8px] left-8 z-10">
@@ -125,12 +124,11 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 className="flex items-center text-[#444] uppercase font-medium px-3 py-1.5 rounded-full"
                 style={{ backgroundColor: colors.bg, fontSize: "clamp(10px, 0.8vw, 12px)", letterSpacing: "0.05em" }}
               >
-                {post.type}
+                {post.postType}
               </span>
             </div>
           </div>
 
-          {/* Sections */}
           <div className="flex flex-col gap-12 md:gap-16 mb-12 md:mb-16">
             {post.sections.map((section) => (
               <div key={section.heading}>
@@ -153,7 +151,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             ))}
           </div>
 
-          {/* Key takeaways */}
           <div
             className="rounded-[20px] px-8 md:px-12 py-8 md:py-10 mb-16 md:mb-24"
             style={{ backgroundColor: colors.bg }}
@@ -187,28 +184,30 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <p className="font-display text-[#292929] leading-tight tracking-[-0.04em]" style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)" }}>
             Something outdated? Help the next person.
           </p>
-          <button className="shrink-0 bg-[#292929] hover:bg-[#111] text-white font-medium tracking-[-0.03em] px-6 py-3 rounded-full transition-all active:scale-95 whitespace-nowrap" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
+          <Link href="/contact" className="shrink-0 bg-[#292929] hover:bg-[#111] text-white font-medium tracking-[-0.03em] px-6 py-3 rounded-full transition-all active:scale-95 whitespace-nowrap" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
             Flag an issue →
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* ── Related posts ──────────────────────────────────── */}
-      <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
-        <div className="flex items-center justify-between mb-8 md:mb-12">
-          <h2 className="font-medium text-[#232323] tracking-[-0.04em]" style={{ fontSize: "clamp(1.25rem, 2vw, 2rem)" }}>
-            From the blog
-          </h2>
-          <Link href="/blog" className="border border-[#e0e0e0] font-medium text-[#232323] tracking-[-0.02em] px-4 py-2 rounded-full hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all whitespace-nowrap" style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}>
-            All posts
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
-          {related.map((p) => (
-            <RelatedCard key={p.slug} {...p} />
-          ))}
-        </div>
-      </section>
+      {related.length > 0 && (
+        <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
+          <div className="flex items-center justify-between mb-8 md:mb-12">
+            <h2 className="font-medium text-[#232323] tracking-[-0.04em]" style={{ fontSize: "clamp(1.25rem, 2vw, 2rem)" }}>
+              From the blog
+            </h2>
+            <Link href="/blog" className="border border-[#e0e0e0] font-medium text-[#232323] tracking-[-0.02em] px-4 py-2 rounded-full hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all whitespace-nowrap" style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}>
+              All posts
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+            {related.map((p) => (
+              <RelatedCard key={p.slug} {...p} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Watermark ──────────────────────────────────────── */}
       <section className="relative py-20 md:py-32 overflow-hidden">

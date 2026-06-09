@@ -1,0 +1,165 @@
+import { client } from "./client";
+
+/* ─── Types ──────────────────────────────────────────────── */
+
+export type SanityCategory = {
+  label: string;
+  id: string;
+  color: string;
+  textColor: string;
+  descColor: string;
+  description: string;
+  homepageName: string;
+  order: number;
+  checklists: { title: string; slug: string; count: number }[];
+};
+
+export type SanityChecklistDocument = {
+  title: string;
+  description: string;
+  where: string;
+  cost: string;
+  time: string;
+  prereq: string;
+};
+
+export type SanityChecklist = {
+  title: string;
+  slug: string;
+  location: string;
+  updatedDate: string;
+  sortedCount: number;
+  category: {
+    label: string;
+    id: string;
+    color: string;
+    textColor: string;
+  };
+  documents: SanityChecklistDocument[];
+  relatedChecklists: { title: string; slug: string }[];
+};
+
+export type SanityBlogPost = {
+  title: string;
+  slug: string;
+  postType: string;
+  category: string;
+  readTime: string;
+  publishedDate: string;
+  excerpt: string;
+  image: string;
+  featured?: boolean;
+  lead: string;
+  sections: { heading: string; body: string }[];
+  takeaways: string[];
+};
+
+export type SanityBlogPostCard = Omit<SanityBlogPost, "lead" | "sections" | "takeaways">;
+
+/* ─── Checklist queries ──────────────────────────────────── */
+
+const checklistFields = `
+  title,
+  "slug": slug.current,
+  location,
+  updatedDate,
+  sortedCount,
+  category-> {
+    label,
+    "id": id.current,
+    color,
+    textColor,
+  },
+  documents[] {
+    title,
+    description,
+    where,
+    cost,
+    time,
+    prereq,
+  },
+  relatedChecklists[]-> {
+    title,
+    "slug": slug.current,
+  }
+`;
+
+export async function getAllChecklistSlugs(): Promise<string[]> {
+  const results = await client.fetch<{ slug: string }[]>(
+    `*[_type == "checklist"]{ "slug": slug.current }`
+  );
+  return results.map((r) => r.slug);
+}
+
+export async function getChecklistBySlug(slug: string): Promise<SanityChecklist | null> {
+  return client.fetch(
+    `*[_type == "checklist" && slug.current == $slug][0] { ${checklistFields} }`,
+    { slug }
+  );
+}
+
+/* ─── Browse / category queries ─────────────────────────── */
+
+export async function getAllCategories(): Promise<SanityCategory[]> {
+  return client.fetch(`
+    *[_type == "category"] | order(order asc) {
+      label,
+      "id": id.current,
+      color,
+      textColor,
+      descColor,
+      description,
+      homepageName,
+      order,
+      "checklists": *[_type == "checklist" && references(^._id)] | order(title asc) {
+        title,
+        "slug": slug.current,
+        "count": count(documents),
+      }
+    }
+  `);
+}
+
+/* ─── Blog post queries ──────────────────────────────────── */
+
+const blogCardFields = `
+  title,
+  "slug": slug.current,
+  postType,
+  category,
+  readTime,
+  publishedDate,
+  excerpt,
+  image,
+  featured,
+`;
+
+export async function getAllBlogPosts(): Promise<SanityBlogPostCard[]> {
+  return client.fetch(`*[_type == "blogPost"] | order(publishedDate desc) { ${blogCardFields} }`);
+}
+
+export async function getAllBlogSlugs(): Promise<string[]> {
+  const results = await client.fetch<{ slug: string }[]>(
+    `*[_type == "blogPost"]{ "slug": slug.current }`
+  );
+  return results.map((r) => r.slug);
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<SanityBlogPost | null> {
+  return client.fetch(
+    `*[_type == "blogPost" && slug.current == $slug][0] {
+      ${blogCardFields}
+      lead,
+      sections[] { heading, body },
+      takeaways,
+    }`,
+    { slug }
+  );
+}
+
+export async function getRelatedBlogPosts(slug: string, count = 3): Promise<SanityBlogPostCard[]> {
+  return client.fetch(
+    `*[_type == "blogPost" && slug.current != $slug] | order(publishedDate desc) [0...$count] { ${blogCardFields} }`,
+    { slug, count }
+  );
+}
