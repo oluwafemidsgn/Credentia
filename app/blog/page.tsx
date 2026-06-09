@@ -3,6 +3,8 @@ import Footer from "../components/Footer";
 import BlogClient from "./BlogClient";
 import { getAllBlogPosts } from "../../lib/sanity/queries";
 
+export const revalidate = 30;
+
 export default async function Blog() {
   const posts = await getAllBlogPosts();
   const featured = posts.find((p) => p.featured) ?? posts[0];

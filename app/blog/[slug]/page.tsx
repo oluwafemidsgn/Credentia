@@ -3,6 +3,8 @@ import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { getBlogPostBySlug, getAllBlogSlugs, getRelatedBlogPosts } from "../../../lib/sanity/queries";
+
+export const revalidate = 30;
 import type { SanityBlogPostCard } from "../../../lib/sanity/queries";
 
 export async function generateStaticParams() {

@@ -3,6 +3,8 @@ import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ChecklistContent from "./ChecklistContent";
+
+export const revalidate = 30;
 import { getChecklistBySlug, getAllChecklistSlugs, getAllBlogPosts } from "../../../lib/sanity/queries";
 
 export async function generateStaticParams() {
