@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import SearchBar from "./components/SearchBar";
 
 /* ─── Data ─────────────────────────────────────────────── */
 
@@ -350,21 +351,7 @@ export default function Home() {
 
       {/* ── Search ─────────────────────────────────────── */}
       <section className="flex flex-col gap-4 items-center px-5 pb-16 md:pb-20 w-full max-w-[720px] mx-auto">
-        {/* Search bar */}
-        <div className="bg-[#f4f4f4] flex items-center justify-between px-5 md:px-6 py-3 md:py-4 rounded-full w-full gap-3">
-          <input
-            type="text"
-            placeholder="e.g first passport, uni admission, travel"
-            className="flex-1 min-w-0 bg-transparent font-medium text-[#232323] placeholder:text-[#9b9b9b] tracking-[-0.02em] outline-none"
-            style={{ fontSize: "clamp(13px, 1vw, 16px)" }}
-          />
-          <button
-            className="bg-[#ccbaf8] px-4 py-2 rounded-3xl font-medium text-[#232323] tracking-[-0.05em] whitespace-nowrap hover:bg-[#b8a0f5] active:scale-95 transition-all shrink-0"
-            style={{ fontSize: "clamp(13px, 1vw, 16px)" }}
-          >
-            Search
-          </button>
-        </div>
+        <SearchBar />
 
         {/* Pills — single line, scrolls on narrow viewports */}
         <div className="flex gap-2 items-center w-full overflow-x-auto scrollbar-none pb-0.5">
