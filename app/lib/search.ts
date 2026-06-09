@@ -45,15 +45,15 @@ export const allChecklists: SearchResult[] = [
 ];
 
 export const allBlogPosts: SearchResult[] = [
-  { title: "Mastering remote work tools", type: "blog", tag: "Step-by-step", href: "/blog" },
-  { title: "The future of electric vehicles", type: "blog", tag: "Insight", href: "/blog" },
-  { title: "ChatGPT and the new AI wave", type: "blog", tag: "Interview", href: "/blog" },
-  { title: "How to renew your passport in 2026", type: "blog", tag: "Guide", href: "/blog" },
-  { title: "NIN vs BVN: what's the difference?", type: "blog", tag: "Explainer", href: "/blog" },
-  { title: "JAMB changes its 2026 requirements", type: "blog", tag: "News", href: "/blog" },
-  { title: "The rise of sustainable fashion", type: "blog", tag: "Analysis", href: "/blog" },
-  { title: "Top 5 smart home devices in 2026", type: "blog", tag: "Review", href: "/blog" },
-  { title: "Revamping urban transport systems", type: "blog", tag: "Case Study", href: "/blog" },
+  { title: "Mastering remote work tools", type: "blog", tag: "Step-by-step", href: "/blog/mastering-remote-work-tools" },
+  { title: "The future of electric vehicles", type: "blog", tag: "Insight", href: "/blog/future-electric-vehicles" },
+  { title: "ChatGPT and the new AI wave", type: "blog", tag: "Interview", href: "/blog/chatgpt-new-ai-wave" },
+  { title: "How to renew your passport in 2026", type: "blog", tag: "Guide", href: "/blog/renew-passport-2026" },
+  { title: "NIN vs BVN: what's the difference?", type: "blog", tag: "Explainer", href: "/blog/nin-vs-bvn" },
+  { title: "JAMB changes its 2026 requirements", type: "blog", tag: "News", href: "/blog/jamb-2026-requirements" },
+  { title: "The rise of sustainable fashion", type: "blog", tag: "Analysis", href: "/blog/rise-sustainable-fashion" },
+  { title: "Top 5 smart home devices in 2026", type: "blog", tag: "Review", href: "/blog/top-5-smart-home-devices" },
+  { title: "Revamping urban transport systems", type: "blog", tag: "Case Study", href: "/blog/revamping-urban-transport" },
 ];
 
 const allItems = [...allChecklists, ...allBlogPosts];
