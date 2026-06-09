@@ -1,0 +1,83 @@
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#ccbaf8]">
+      <div className="max-w-[1920px] mx-auto px-5 sm:px-10 lg:px-20 py-12 md:py-16">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-16">
+
+          <div className="col-span-2 lg:col-span-1 flex flex-col gap-3">
+            <div className="flex items-center gap-2 mb-1">
+              <img src="/assets/logo-icon.svg" alt="" className="w-8 h-5" />
+              <span
+                className="font-bold text-[#351459] tracking-[-0.05em]"
+                style={{ fontSize: "clamp(14px, 1.1vw, 18px)" }}
+              >
+                Credentia
+              </span>
+            </div>
+            <p className="text-[#505050] leading-[1.5]" style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}>
+              Know what you need. The documents of your life, decoded.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
+              Categories
+            </span>
+            {["Education", "Travel", "Civic", "Work"].map((item) => (
+              <Link
+                key={item}
+                href="#"
+                className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
+                style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
+              Pages
+            </span>
+            {["Home", "Blog", "Buy me a coffee", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href="#"
+                className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
+                style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
+              Follow
+            </span>
+            {["Instagram", "X/Twitter", "Tiktok"].map((item) => (
+              <Link
+                key={item}
+                href="#"
+                className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
+                style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="mt-10 md:mt-14 pt-6 border-t border-[#b5a0ee] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+          style={{ fontSize: "clamp(10px, 0.8vw, 12px)" }}
+        >
+          <span className="text-[#505050]">© 2026 Credentia. Built for Lagos.</span>
+          <span className="text-[#505050]">No agent. No guessing. Free.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}

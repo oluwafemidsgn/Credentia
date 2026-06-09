@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-faculty-glyphic);
+
+  --color-brand-purple: #351459;
+  --color-brand-lavender: #ccbaf8;
+  --color-text-primary: #232323;
+  --color-text-secondary: #505050;
+  --color-text-muted: #9b9b9b;
+  --color-surface: #f4f4f4;
+
+  --color-cat-education: #efd536;
+  --color-cat-travel: #8bcef7;
+  --color-cat-civic: #be3738;
+  --color-cat-work: #6f00ed;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: #232323;
+  background: white;
+  margin: 0;
 }
+
+/* Hide scrollbar utility */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* ── Hero animations ────────────────────────────────── */
+
+/*
+ * Shared float keyframe: the CSS custom property --chip-rotate lets each
+ * chip keep its unique rotation angle throughout the animation, so they
+ * don't all snap to 0deg mid-float.
+ */
+@keyframes float-chip {
+  0%, 100% { transform: translateY(0px)   rotate(var(--chip-rotate, 0deg)); }
+  50%       { transform: translateY(-16px) rotate(var(--chip-rotate, 0deg)); }
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0,    0)    scale(1);    }
+  33%       { transform: translate(28px, -18px) scale(1.06); }
+  66%       { transform: translate(-14px, 12px) scale(0.95); }
+}
+
+/* Blob instances — different speeds so they never sync up */
+.blob-hero-1 { animation: blob-drift 14s ease-in-out infinite; }
+.blob-hero-2 { animation: blob-drift 18s ease-in-out infinite 5s; }
+.blob-hero-3 { animation: blob-drift 22s ease-in-out infinite 10s; }
+
+/* Chip instances — staggered delays + varied durations */
+.chip-1 { animation: float-chip 6s   ease-in-out infinite 0s;   }
+.chip-2 { animation: float-chip 7.5s ease-in-out infinite 0.8s; }
+.chip-3 { animation: float-chip 8s   ease-in-out infinite 1.6s; }
+.chip-4 { animation: float-chip 6.5s ease-in-out infinite 2.4s; }
+.chip-5 { animation: float-chip 9s   ease-in-out infinite 1.2s; }
+.chip-6 { animation: float-chip 7s   ease-in-out infinite 3.2s; }
