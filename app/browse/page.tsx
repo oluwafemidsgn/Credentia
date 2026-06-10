@@ -49,10 +49,10 @@ function BrowseCard({
           className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] overflow-hidden"
           style={{ backgroundColor: bg }}
         >
-          <div className="absolute bottom-8 left-8 right-8 transition-transform duration-300 group-hover:-translate-y-1.5">
+          <div className="absolute bottom-5 left-8 right-8 transition-transform duration-300 group-hover:-translate-y-1.5">
             <h3
               className="font-display leading-tight tracking-[-0.04em] mb-2"
-              style={{ color: textColor, fontSize: "clamp(16px, 1.6vw, 26px)" }}
+              style={{ color: textColor, fontSize: "clamp(13px, 1.2vw, 18px)" }}
             >
               {title}
             </h3>
