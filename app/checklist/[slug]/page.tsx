@@ -188,19 +188,6 @@ export default async function ChecklistPage({
         </section>
       )}
 
-      {/* ── Watermark ─────────────────────────────────────── */}
-      <section className="relative py-14 md:py-32 overflow-hidden">
-        <p
-          aria-hidden
-          className="absolute bottom-0 left-0 right-0 text-center font-bold text-[#f4f4f4] leading-none pointer-events-none select-none whitespace-nowrap translate-y-[45%]"
-          style={{ fontSize: "clamp(60px, 23vw, 432px)", letterSpacing: "clamp(-3px, -1.2vw, -21.6px)" }}
-        >
-          Credentia
-        </p>
-        <p className="relative z-10 text-center font-display text-[#232323] leading-[1.2] max-w-[1260px] mx-auto px-4 sm:px-8 tracking-[-0.04em] text-[1.6rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[5.5rem]">
-          No agent. No guessing. Free, and built for Lagos first.
-        </p>
-      </section>
 
       <Footer />
     </main>
