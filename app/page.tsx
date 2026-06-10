@@ -6,19 +6,19 @@ import SearchBar from "./components/SearchBar";
 /* ─── Data ─────────────────────────────────────────────── */
 
 const categories = [
-  { name: "School", label: "EDUCATION", description: "Admission, results, transcripts, NYSC", bg: "#efd536", textColor: "#292929", descColor: "#505050", href: "/browse#education" },
-  { name: "Travel", label: "TRAVEL", description: "Passport, visa, yellow card", bg: "#8bcef7", textColor: "#292929", descColor: "#505050", href: "/browse#travel" },
-  { name: "Civic", label: "CIVIC", description: "NIN, PVC, registration", bg: "#be3738", textColor: "white", descColor: "#d6d6d6", href: "/browse#civic" },
-  { name: "Work", label: "WORK", description: "CV, references, certificates", bg: "#6f00ed", textColor: "white", descColor: "#d6d6d6", href: "/browse#work" },
-  { name: "Vehicle", label: "ASSETS", description: "Licence, registration, papers to carry", bg: "#8bcef7", textColor: "#292929", descColor: "#505050", href: "/browse#travel" },
-  { name: "Property", label: "PROPERTY", description: "Title, survey, agreements", bg: "#efd536", textColor: "#292929", descColor: "#505050", href: "/browse#property" },
+  { name: "Identity", label: "IDENTITY", description: "NIN, national ID, passport, PVC, BVN", bg: "#ccbaf8", textColor: "#292929", descColor: "#505050", href: "/browse#civil-identity" },
+  { name: "Education", label: "EDUCATION", description: "Admission, results, NYSC, study abroad", bg: "#efd536", textColor: "#292929", descColor: "#505050", href: "/browse#education" },
+  { name: "Travel", label: "TRAVEL", description: "Passport, visa, yellow fever card", bg: "#73c2fb", textColor: "#292929", descColor: "#505050", href: "/browse#travel-immigration" },
+  { name: "Work", label: "EMPLOYMENT", description: "Civil service, private sector, contracts", bg: "#ffd166", textColor: "#292929", descColor: "#505050", href: "/browse#employment" },
+  { name: "Vehicle", label: "TRANSPORT", description: "Driver's licence, registration, papers", bg: "#ffb347", textColor: "#292929", descColor: "#505050", href: "/browse#transportation-vehicles" },
+  { name: "Property", label: "PROPERTY", description: "C of O, building permit, renting", bg: "#6f00ed", textColor: "#ffffff", descColor: "#d6d6d6", href: "/browse#real-estate-housing" },
 ];
 
 const checklists = [
-  { title: "University Admission", category: "Education", count: "5 documents", slug: "university-admission" },
-  { title: "First International Passport", category: "Travel", count: "5 documents", slug: "international-passport" },
-  { title: "Get your PVC", category: "Civic", count: "3 documents", slug: "pvc-registration" },
-  { title: "Applying for your first job", category: "Work", count: "5 documents", slug: "first-job" },
+  { title: "University Admission", category: "Education", count: "8 documents", slug: "university-admission" },
+  { title: "International Passport (New Application)", category: "Identity", count: "8 documents", slug: "international-passport-new" },
+  { title: "Permanent Voter's Card (PVC)", category: "Identity", count: "4 documents", slug: "permanent-voters-card" },
+  { title: "Private Sector Employment", category: "Employment", count: "8 documents", slug: "private-sector-employment" },
 ];
 
 const blogPosts = [
@@ -50,10 +50,10 @@ const blogPosts = [
 
 const quickTags = [
   { label: "University admission", slug: "university-admission" },
-  { label: "International passport", slug: "international-passport" },
-  { label: "PVC registration", slug: "pvc-registration" },
-  { label: "First job", slug: "first-job" },
-  { label: "Car papers", slug: "car-papers" },
+  { label: "International passport", slug: "international-passport-new" },
+  { label: "NIN enrollment", slug: "nin-enrollment" },
+  { label: "Driver's licence", slug: "drivers-license-first-time" },
+  { label: "Renting a property", slug: "renting-a-property" },
 ];
 
 /* ─── Category Card ─────────────────────────────────────── */

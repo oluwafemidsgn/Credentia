@@ -2,103 +2,10 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
+import { getAllCategories } from "../../lib/sanity/queries";
+import type { SanityCategory } from "../../lib/sanity/queries";
 
-/* ─── Data ─────────────────────────────────────────────── */
-
-const quickTags = [
-  { label: "University admission", slug: "university-admission" },
-  { label: "International passport", slug: "international-passport" },
-  { label: "PVC registration", slug: "pvc-registration" },
-  { label: "First job", slug: "first-job" },
-  { label: "Car papers", slug: "car-papers" },
-];
-
-type Checklist = { title: string; count: number; slug: string };
-
-type Category = {
-  id: string;
-  label: string;
-  bg: string;
-  textColor: string;
-  descColor: string;
-  total: number;
-  checklists: Checklist[];
-};
-
-const browseCategories: Category[] = [
-  {
-    id: "education",
-    label: "Education",
-    bg: "#efd536",
-    textColor: "#292929",
-    descColor: "#505050",
-    total: 8,
-    checklists: [
-      { title: "University Admission", count: 5, slug: "university-admission" },
-      { title: "WAEC / NECO sign-up", count: 3, slug: "waec-neco-signup" },
-      { title: "Scholarship application", count: 5, slug: "scholarship-application" },
-      { title: "NYSC registration", count: 5, slug: "nysc-registration" },
-      { title: "Transcript request", count: 4, slug: "transcript-request" },
-      { title: "Student ID & hostel", count: 3, slug: "student-id-hostel" },
-      { title: "Post-UTME registration", count: 4, slug: "post-utme" },
-      { title: "Change of course", count: 3, slug: "change-of-course" },
-    ],
-  },
-  {
-    id: "travel",
-    label: "Travel",
-    bg: "#8bcef7",
-    textColor: "#292929",
-    descColor: "#505050",
-    total: 8,
-    checklists: [
-      { title: "First international passport", count: 6, slug: "international-passport" },
-      { title: "Passport renewal", count: 4, slug: "passport-renewal" },
-      { title: "Visa application", count: 7, slug: "visa-application" },
-      { title: "Yellow card / vaccinations", count: 3, slug: "yellow-card" },
-      { title: "Travel insurance", count: 3, slug: "travel-insurance" },
-      { title: "Emigration clearance", count: 4, slug: "emigration-clearance" },
-      { title: "Work permit abroad", count: 8, slug: "work-permit" },
-      { title: "Student visa", count: 7, slug: "student-visa" },
-    ],
-  },
-  {
-    id: "civic",
-    label: "Civic",
-    bg: "#ddf07c",
-    textColor: "#292929",
-    descColor: "#505050",
-    total: 8,
-    checklists: [
-      { title: "NIN registration", count: 2, slug: "nin-registration" },
-      { title: "Get your PVC", count: 3, slug: "pvc-registration" },
-      { title: "Birth certificate", count: 4, slug: "birth-certificate" },
-      { title: "Marriage certificate", count: 6, slug: "marriage-certificate" },
-      { title: "Name change", count: 5, slug: "name-change" },
-      { title: "Driver's licence", count: 5, slug: "drivers-licence" },
-      { title: "National ID card", count: 3, slug: "national-id" },
-      { title: "Death certificate", count: 4, slug: "death-certificate" },
-    ],
-  },
-  {
-    id: "property",
-    label: "Property",
-    bg: "#6f00ed",
-    textColor: "white",
-    descColor: "#d6d6d6",
-    total: 8,
-    checklists: [
-      { title: "Buy a plot of land", count: 7, slug: "buy-land" },
-      { title: "Rent an apartment", count: 5, slug: "rent-apartment" },
-      { title: "C of O application", count: 6, slug: "cof-o" },
-      { title: "Building permit", count: 8, slug: "building-permit" },
-      { title: "Survey plan", count: 4, slug: "survey-plan" },
-      { title: "Deed of assignment", count: 5, slug: "deed-of-assignment" },
-      { title: "Mortgage application", count: 9, slug: "mortgage" },
-      { title: "Property transfer", count: 6, slug: "property-transfer" },
-    ],
-  },
-];
+export const revalidate = 30;
 
 /* ─── Browse Card ────────────────────────────────────────── */
 function BrowseCard({
@@ -109,7 +16,15 @@ function BrowseCard({
   bg,
   textColor,
   descColor,
-}: Checklist & Pick<Category, "label" | "bg" | "textColor" | "descColor">) {
+}: {
+  title: string;
+  count: number;
+  slug: string;
+  label: string;
+  bg: string;
+  textColor: string;
+  descColor: string;
+}) {
   return (
     <Link
       href={`/checklist/${slug}`}
@@ -164,7 +79,7 @@ function BrowseCard({
 }
 
 /* ─── Category Section ───────────────────────────────────── */
-function CategorySection({ id, label, bg, textColor, descColor, total, checklists }: Category) {
+function CategorySection({ id, label, color, textColor, descColor, checklists }: SanityCategory) {
   return (
     <section id={id} className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto scroll-mt-20">
       <div className="flex items-center justify-between mb-8 md:mb-12">
@@ -179,16 +94,18 @@ function CategorySection({ id, label, bg, textColor, descColor, total, checklist
           className="border border-[#e0e0e0] font-medium text-[#232323] tracking-[-0.02em] px-4 py-2 rounded-full whitespace-nowrap"
           style={{ fontSize: "clamp(11px, 0.85vw, 14px)" }}
         >
-          {total} total
+          {checklists.length} total
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
         {checklists.map((item) => (
           <BrowseCard
-            key={item.title}
-            {...item}
+            key={item.slug}
+            title={item.title}
+            count={item.count}
+            slug={item.slug}
             label={label.toUpperCase()}
-            bg={bg}
+            bg={color}
             textColor={textColor}
             descColor={descColor}
           />
@@ -199,7 +116,13 @@ function CategorySection({ id, label, bg, textColor, descColor, total, checklist
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function Browse() {
+export default async function Browse() {
+  const categories = await getAllCategories();
+
+  const quickTags = categories
+    .flatMap((c) => c.checklists.slice(0, 2))
+    .slice(0, 6);
+
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">
       <Navbar />
@@ -231,15 +154,15 @@ export default function Browse() {
               className="border border-[#e0e0e0] font-medium text-[#232323] tracking-[-0.02em] px-4 py-2 rounded-full hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all whitespace-nowrap shrink-0"
               style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}
             >
-              {tag.label}
+              {tag.title}
             </Link>
           ))}
         </div>
       </section>
 
       {/* ── Category sections ────────────────────────── */}
-      {browseCategories.map((cat) => (
-        <CategorySection key={cat.label} {...cat} />
+      {categories.map((cat) => (
+        <CategorySection key={cat.id} {...cat} />
       ))}
 
       {/* ── Watermark ────────────────────────────────── */}
