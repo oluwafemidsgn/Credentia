@@ -22,12 +22,14 @@ export default async function Image() {
       >
         {/* Category tabs at top */}
         <div style={{ display: "flex", flexDirection: "row", gap: 0, paddingLeft: 48, paddingTop: 0 }}>
-          {[
-            { label: "EDUCATION", bg: "#efd536", color: "#232323", border: "2px solid #c8b82e" },
-            { label: "TRAVEL", bg: "#8bcef7", color: "#232323", border: "none" },
-            { label: "CIVIC", bg: "#be3738", color: "#fff", border: "none" },
-            { label: "LAW", bg: "#6f00ed", color: "#fff", border: "none" },
-          ].map((tab) => (
+          {(
+            [
+              { label: "EDUCATION", bg: "#efd536", color: "#232323" },
+              { label: "TRAVEL",    bg: "#8bcef7", color: "#232323" },
+              { label: "CIVIC",     bg: "#be3738", color: "#ffffff" },
+              { label: "LAW",       bg: "#6f00ed", color: "#ffffff" },
+            ] as { label: string; bg: string; color: string }[]
+          ).map((tab) => (
             <div
               key={tab.label}
               style={{
@@ -42,8 +44,6 @@ export default async function Image() {
                 paddingRight: 24,
                 borderRadius: "12px 12px 0 0",
                 marginRight: 4,
-                border: tab.border,
-                borderBottom: "none",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -120,7 +120,7 @@ export default async function Image() {
                 maxWidth: 620,
               }}
             >
-              Type it. We&apos;ll tell you every document you need, why, and where to get it.
+              Type it. We'll tell you every document you need, why, and where to get it.
             </div>
           </div>
 
