@@ -166,21 +166,35 @@ export async function getRelatedBlogPosts(slug: string, count = 3): Promise<Sani
 
 /* ─── Search ─────────────────────────────────────────────── */
 
-export type SearchChecklist = { title: string; slug: string; category: string; count: number };
-export type SearchBlog = { title: string; slug: string; postType: string; excerpt: string };
+export type SearchChecklist = {
+  title: string;
+  slug: string;
+  category: string;
+  color: string;
+  textColor: string;
+  descColor: string;
+  count: number;
+};
+export type SearchBlog = { title: string; slug: string; postType: string; excerpt: string; readTime: string; publishedDate: string };
 
 export async function searchSanity(q: string): Promise<{ checklists: SearchChecklist[]; blogs: SearchBlog[] }> {
   if (!q.trim()) return { checklists: [], blogs: [] };
   const [checklists, blogs] = await Promise.all([
     client.fetch<SearchChecklist[]>(
-      `*[_type == "checklist" && title match $q + "*"][0...20] {
-        title, "slug": slug.current, "category": category->label, "count": count(documents)
+      `*[_type == "checklist" && title match $q + "*"][0...24] {
+        title,
+        "slug": slug.current,
+        "category": category->label,
+        "color": category->color,
+        "textColor": category->textColor,
+        "descColor": category->descColor,
+        "count": count(documents)
       }`,
       { q }
     ),
     client.fetch<SearchBlog[]>(
       `*[_type == "blogPost" && title match $q + "*"][0...6] {
-        title, "slug": slug.current, postType, excerpt
+        title, "slug": slug.current, postType, excerpt, readTime, publishedDate
       }`,
       { q }
     ),

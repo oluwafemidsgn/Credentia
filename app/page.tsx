@@ -368,6 +368,22 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Most viewed checklist ──────────────────────── */}
+      <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
+        <h2
+          className="font-medium text-[#232323] tracking-[-0.04em] mb-8 md:mb-12"
+          style={{ fontSize: "clamp(1.125rem, 2.2vw, 2rem)" }}
+        >
+          Most viewed checklist this month
+        </h2>
+        {/* 1 col → 2 col */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
+          {checklists.map((item) => (
+            <ChecklistCard key={item.title} {...item} />
+          ))}
+        </div>
+      </section>
+
       {/* ── Browse by category ─────────────────────────── */}
       <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
         <div className="flex items-center justify-between mb-8 md:mb-12">
@@ -389,22 +405,6 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10 overflow-visible">
           {categories.map((cat) => (
             <CategoryCard key={`${cat.name}-${cat.label}`} {...cat} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── Most viewed checklist ──────────────────────── */}
-      <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
-        <h2
-          className="font-medium text-[#232323] tracking-[-0.04em] mb-8 md:mb-12"
-          style={{ fontSize: "clamp(1.125rem, 2.2vw, 2rem)" }}
-        >
-          Most viewed checklist this month
-        </h2>
-        {/* 1 col → 2 col */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
-          {checklists.map((item) => (
-            <ChecklistCard key={item.title} {...item} />
           ))}
         </div>
       </section>
