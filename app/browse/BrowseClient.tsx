@@ -119,17 +119,16 @@ export default function BrowseClient({ categories }: { categories: SanityCategor
 
   return (
     <>
-      {/* Filter pills — wrap to show everything at once */}
-      <section className="px-5 sm:px-10 lg:px-20 pb-12 md:pb-16 max-w-[1100px] mx-auto">
-        <div className="flex flex-wrap gap-2 items-center justify-center w-full">
+      {/* Filter pills — single-line scroll on mobile, wrap on desktop */}
+      <section className="pb-10 md:pb-16">
+        <div className="flex md:flex-wrap md:justify-center gap-2 items-center overflow-x-auto px-4 sm:px-8 lg:px-20 pb-1 md:pb-0 scrollbar-none">
           <button
             onClick={() => setActive("all")}
-            className={`font-medium tracking-[-0.02em] px-4 py-2 rounded-full transition-all active:scale-95 ${
+            className={`shrink-0 font-medium tracking-[-0.02em] px-4 py-2 rounded-full transition-all active:scale-95 text-[12px] sm:text-[13px] ${
               active === "all"
                 ? "bg-[#232323] text-white"
                 : "border border-[#e0e0e0] text-[#232323] hover:border-[#ccbaf8] hover:bg-[#f9f5ff]"
             }`}
-            style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}
           >
             All
           </button>
@@ -137,12 +136,11 @@ export default function BrowseClient({ categories }: { categories: SanityCategor
             <button
               key={cat.id}
               onClick={() => setActive(active === cat.id ? "all" : cat.id)}
-              className={`font-medium tracking-[-0.02em] px-4 py-2 rounded-full transition-all active:scale-95 ${
+              className={`shrink-0 font-medium tracking-[-0.02em] px-4 py-2 rounded-full transition-all active:scale-95 text-[12px] sm:text-[13px] ${
                 active === cat.id
                   ? "bg-[#232323] text-white"
                   : "border border-[#e0e0e0] text-[#232323] hover:border-[#ccbaf8] hover:bg-[#f9f5ff]"
               }`}
-              style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}
             >
               {cat.label}
               <span className={active === cat.id ? "text-[#b8b8b8] ml-1.5" : "text-[#9b9b9b] ml-1.5"}>

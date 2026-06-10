@@ -108,29 +108,26 @@ export default async function ChecklistPage({
       <Navbar />
 
       {/* ── Hero card ─────────────────────────────────────── */}
-      <div className="px-5 sm:px-10 lg:px-20 pt-8 pb-0 max-w-[1920px] mx-auto">
-        <div className="relative" style={{ height: "clamp(200px, 16vw, 292px)" }}>
+      <div className="px-4 sm:px-8 lg:px-20 pt-6 sm:pt-8 pb-0 max-w-[1920px] mx-auto">
+        <div className="relative" style={{ height: "clamp(180px, 16vw, 292px)" }}>
           {/* Tab */}
           <div
-            className="absolute top-0 left-7 z-10 h-10 flex items-center px-4 rounded-tl-2xl rounded-tr-2xl"
+            className="absolute top-0 left-5 sm:left-7 z-10 h-8 sm:h-10 flex items-center px-3 sm:px-4 rounded-tl-2xl rounded-tr-2xl"
             style={{ backgroundColor: checklist.category.color }}
           >
             <span
-              className="font-medium tracking-wide uppercase"
-              style={{ color: checklist.category.textColor, fontSize: "clamp(10px, 0.8vw, 13px)" }}
+              className="font-medium tracking-wide uppercase text-[10px] sm:text-[11px]"
+              style={{ color: checklist.category.textColor }}
             >
               {checklist.category.label.toUpperCase()}
             </span>
           </div>
           {/* Body */}
           <div
-            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-end px-10 md:px-16 pb-10 md:pb-14 gap-4 md:gap-6"
+            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-end px-5 sm:px-10 md:px-16 pb-5 sm:pb-8 md:pb-14 gap-2 sm:gap-4 md:gap-6"
             style={{ backgroundColor: checklist.category.color }}
           >
-            <p
-              className="text-[#505050] tracking-[-0.02em]"
-              style={{ fontSize: "clamp(11px, 0.85vw, 16px)" }}
-            >
+            <p className="text-[#505050] tracking-[-0.02em] text-[11px] sm:text-[13px] md:text-[15px] hidden sm:block">
               <Link href="/browse" className="hover:underline">Browse</Link>
               {" → "}
               <Link href={`/browse#${checklist.category.id}`} className="hover:underline">
@@ -139,23 +136,15 @@ export default async function ChecklistPage({
               {" → "}
               {checklist.title}
             </p>
-            <h1
-              className="font-display text-[#292929] leading-none tracking-[-0.04em]"
-              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}
-            >
+            <h1 className="font-display text-[#292929] leading-none tracking-[-0.04em] text-[1.35rem] sm:text-[1.75rem] md:text-[2.5rem]">
               {checklist.title}
             </h1>
-            <div
-              className="flex flex-wrap items-center gap-3 md:gap-4 text-[#505050]"
-              style={{ fontSize: "clamp(11px, 0.85vw, 16px)" }}
-            >
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-[#505050] text-[10px] sm:text-[12px] md:text-[14px]">
               <span>{checklist.documents.length} documents</span>
               <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0" />
-              <span>{checklist.sortedCount} of {checklist.documents.length} sorted</span>
-              <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0" />
               <span>Updated {checklist.updatedDate}</span>
-              <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0" />
-              <span>{checklist.location}</span>
+              <span className="w-1 h-1 rounded-full bg-[#505050] shrink-0 hidden sm:block" />
+              <span className="hidden sm:inline">{checklist.location}</span>
             </div>
           </div>
         </div>
@@ -200,21 +189,15 @@ export default async function ChecklistPage({
       )}
 
       {/* ── Watermark ─────────────────────────────────────── */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-14 md:py-32 overflow-hidden">
         <p
           aria-hidden
           className="absolute bottom-0 left-0 right-0 text-center font-bold text-[#f4f4f4] leading-none pointer-events-none select-none whitespace-nowrap translate-y-[45%]"
-          style={{
-            fontSize: "clamp(80px, 23vw, 432px)",
-            letterSpacing: "clamp(-4px, -1.2vw, -21.6px)",
-          }}
+          style={{ fontSize: "clamp(60px, 23vw, 432px)", letterSpacing: "clamp(-3px, -1.2vw, -21.6px)" }}
         >
           Credentia
         </p>
-        <p
-          className="relative z-10 text-center font-display text-[#232323] leading-[1.2] max-w-[1260px] mx-auto px-5 md:px-8 tracking-[-0.04em]"
-          style={{ fontSize: "clamp(2rem, 5.5vw, 6rem)" }}
-        >
+        <p className="relative z-10 text-center font-display text-[#232323] leading-[1.2] max-w-[1260px] mx-auto px-4 sm:px-8 tracking-[-0.04em] text-[1.6rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[5.5rem]">
           No agent. No guessing. Free, and built for Lagos first.
         </p>
       </section>
