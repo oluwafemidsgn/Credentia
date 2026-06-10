@@ -12,8 +12,7 @@ function ResultCard({ title, slug, category, color, textColor, descColor, count 
   return (
     <Link
       href={`/checklist/${slug}`}
-      className="relative select-none group block"
-      style={{ height: "clamp(190px, 14vw, 240px)" }}
+      className="relative select-none group block h-[150px] sm:h-[clamp(190px,14vw,240px)]"
     >
       <div className="absolute inset-0 transition-all duration-300 ease-out group-hover:-translate-y-2 group-hover:drop-shadow-xl">
         {/* Tab */}
