@@ -351,7 +351,7 @@ export default function Home() {
 
       {/* ── Search ─────────────────────────────────────── */}
       <section className="flex flex-col gap-4 items-center px-5 pb-16 md:pb-20 w-full max-w-[720px] mx-auto">
-        <SearchBar />
+        <SearchBar white />
 
         {/* Pills — single line, scrolls on narrow viewports */}
         <div className="flex gap-2 items-center w-full overflow-x-auto scrollbar-none pb-0.5">

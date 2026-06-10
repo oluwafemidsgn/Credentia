@@ -163,3 +163,27 @@ export async function getRelatedBlogPosts(slug: string, count = 3): Promise<Sani
     { slug, count }
   );
 }
+
+/* ─── Search ─────────────────────────────────────────────── */
+
+export type SearchChecklist = { title: string; slug: string; category: string; count: number };
+export type SearchBlog = { title: string; slug: string; postType: string; excerpt: string };
+
+export async function searchSanity(q: string): Promise<{ checklists: SearchChecklist[]; blogs: SearchBlog[] }> {
+  if (!q.trim()) return { checklists: [], blogs: [] };
+  const [checklists, blogs] = await Promise.all([
+    client.fetch<SearchChecklist[]>(
+      `*[_type == "checklist" && title match $q + "*"][0...20] {
+        title, "slug": slug.current, "category": category->label, "count": count(documents)
+      }`,
+      { q }
+    ),
+    client.fetch<SearchBlog[]>(
+      `*[_type == "blogPost" && title match $q + "*"][0...6] {
+        title, "slug": slug.current, postType, excerpt
+      }`,
+      { q }
+    ),
+  ]);
+  return { checklists, blogs };
+}
