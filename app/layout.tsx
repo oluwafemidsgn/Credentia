@@ -18,6 +18,22 @@ export const metadata: Metadata = {
   title: "Credentia — Every document for every step of life",
   description:
     "The document directory for Lagos. Find exactly which documents you need for any life milestone — free, no agent required.",
+  metadataBase: new URL("https://credentia.site"),
+  openGraph: {
+    title: "Credentia — Every document for every step of life",
+    description:
+      "The document directory for Lagos. Find exactly which documents you need for any life milestone — free, no agent required.",
+    url: "https://credentia.site",
+    siteName: "Credentia",
+    locale: "en_NG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Credentia — Every document for every step of life",
+    description:
+      "The document directory for Lagos. Find exactly which documents you need for any life milestone — free, no agent required.",
+  },
 };
 
 export default function RootLayout({
