@@ -69,8 +69,8 @@ export default function BlogClient({
 }) {
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
 
-  const visiblePosts =
-    activeFilter === "all" ? posts : posts.filter((p) => p.category === activeFilter);
+  const gridPosts = (activeFilter === "all" ? posts : posts.filter((p) => p.category === activeFilter))
+    .filter((p) => p.slug !== featured.slug);
 
   return (
     <>
@@ -92,8 +92,8 @@ export default function BlogClient({
         ))}
       </div>
 
-      {/* Featured post */}
-      <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto mt-12 md:mt-16">
+      {/* Featured post — hidden when a category filter is active */}
+      {activeFilter === "all" && <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto mt-12 md:mt-16">
         <Link href={`/blog/${featured.slug}`} className="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-[#f4f4f4] rounded-[24px] overflow-hidden group">
           <div className="relative" style={{ minHeight: "clamp(320px, 34vw, 560px)" }}>
             {/* Coloured folder background */}
@@ -134,7 +134,7 @@ export default function BlogClient({
             </div>
           </div>
         </Link>
-      </section>
+      </section>}
 
       {/* Flag an issue CTA */}
       <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-20 max-w-[1920px] mx-auto">
@@ -158,9 +158,9 @@ export default function BlogClient({
         <h2 className="font-medium text-[#232323] tracking-[-0.04em] mb-8 md:mb-12" style={{ fontSize: "clamp(1.25rem, 2vw, 2rem)" }}>
           From the blog
         </h2>
-        {visiblePosts.length > 0 ? (
+        {gridPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
-            {visiblePosts.map((post) => (
+            {gridPosts.map((post) => (
               <BlogCard key={post.slug} {...post} />
             ))}
           </div>
