@@ -1,4 +1,10 @@
 import { notFound } from "next/navigation";
+
+const FOLDER_SVGS = ["/assets/blog-1.svg", "/assets/blog-2.svg", "/assets/blog-3.svg"];
+function folderBg(slug: string) {
+  const n = slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return FOLDER_SVGS[n % FOLDER_SVGS.length];
+}
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -35,10 +41,13 @@ function BlogCard({
       className="bg-[#f4f4f4] rounded-2xl flex-1 flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative shrink-0" style={{ height: "clamp(180px, 22vw, 320px)" }}>
-        <div className="absolute top-[22px] inset-x-[11px] bottom-[52px] bg-white rounded-2xl overflow-hidden">
+        <div className="absolute inset-[11px_11px_0]">
+          <img src={folderBg(slug)} alt="" className="w-full h-full" />
+        </div>
+        <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl overflow-hidden">
           {img
             ? <img src={img} alt="" className="w-full h-full object-cover" />
-            : <div className="w-full h-full bg-[#e8e8e8]" />}
+            : <div className="w-full h-full bg-white" />}
         </div>
         <div className="absolute bottom-[6px] left-7 z-10">
           <span
