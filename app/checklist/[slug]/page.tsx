@@ -35,12 +35,11 @@ function BlogCard({
       className="bg-[#f4f4f4] rounded-2xl flex-1 flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative shrink-0" style={{ height: "clamp(180px, 22vw, 320px)" }}>
-        <div className="absolute inset-[11px_11px_0]">
+        <div className="absolute top-[22px] inset-x-[11px] bottom-[52px] bg-white rounded-2xl overflow-hidden">
           {img
-            ? <img src={img} alt="" className="w-full h-full object-cover rounded-t-xl" />
-            : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
+            ? <img src={img} alt="" className="w-full h-full object-cover" />
+            : <div className="w-full h-full bg-[#e8e8e8]" />}
         </div>
-        <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
           <span
             className="flex items-center bg-white/90 backdrop-blur-sm text-[#444] uppercase font-medium px-3 py-1.5 rounded-full"

@@ -16,12 +16,12 @@ function BlogCard({ slug, postType, readTime, publishedDate, title, excerpt, ima
   return (
     <Link href={`/blog/${slug}`} className="bg-[#f4f4f4] rounded-2xl flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative shrink-0" style={{ height: "clamp(160px, 18vw, 260px)" }}>
-        <div className="absolute inset-[11px_11px_0]">
+        {/* White image container */}
+        <div className="absolute top-[22px] inset-x-[11px] bottom-[52px] bg-white rounded-2xl overflow-hidden">
           {image
-            ? <img src={image} alt="" className="w-full h-full object-cover rounded-t-xl" />
-            : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
+            ? <img src={image} alt="" className="w-full h-full object-cover" />
+            : <div className="w-full h-full bg-[#e8e8e8]" />}
         </div>
-        <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
           <span
             className="flex items-center bg-white/90 backdrop-blur-sm text-[#444] uppercase font-medium px-3 py-1.5 rounded-full"
@@ -86,12 +86,11 @@ export default function BlogClient({
       <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto mt-12 md:mt-16">
         <Link href={`/blog/${featured.slug}`} className="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-[#f4f4f4] rounded-[24px] overflow-hidden group">
           <div className="relative" style={{ minHeight: "clamp(320px, 34vw, 560px)" }}>
-            <div className="absolute inset-[16px]">
+            <div className="absolute top-[28px] inset-x-[16px] bottom-[88px] bg-white rounded-2xl overflow-hidden">
               {featured.image
-                ? <img src={featured.image} alt="" className="w-full h-full object-cover rounded-xl" />
-                : <div className="w-full h-full bg-[#e8e8e8] rounded-xl" />}
+                ? <img src={featured.image} alt="" className="w-full h-full object-cover" />
+                : <div className="w-full h-full bg-[#e8e8e8]" />}
             </div>
-            <div className="absolute top-[28px] inset-x-[28px] bottom-[88px] bg-white rounded-2xl" />
             <div className="absolute bottom-[20px] left-9 z-10">
               <span
                 className="flex items-center bg-white/90 backdrop-blur-sm text-[#444] uppercase font-medium px-3 py-1.5 rounded-full"
