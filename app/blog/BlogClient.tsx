@@ -17,7 +17,9 @@ function BlogCard({ slug, postType, readTime, publishedDate, title, excerpt, ima
     <Link href={`/blog/${slug}`} className="bg-[#f4f4f4] rounded-2xl flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative shrink-0" style={{ height: "clamp(160px, 18vw, 260px)" }}>
         <div className="absolute inset-[11px_11px_0]">
-          <img src={image} alt="" className="w-full h-full" />
+          {image
+            ? <img src={image} alt="" className="w-full h-full object-cover rounded-t-xl" />
+            : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
         </div>
         <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
@@ -85,7 +87,9 @@ export default function BlogClient({
         <Link href={`/blog/${featured.slug}`} className="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-[#f4f4f4] rounded-[24px] overflow-hidden group">
           <div className="relative" style={{ minHeight: "clamp(320px, 34vw, 560px)" }}>
             <div className="absolute inset-[16px]">
-              <img src={featured.image} alt="" className="w-full h-full" />
+              {featured.image
+                ? <img src={featured.image} alt="" className="w-full h-full object-cover rounded-xl" />
+                : <div className="w-full h-full bg-[#e8e8e8] rounded-xl" />}
             </div>
             <div className="absolute top-[28px] inset-x-[28px] bottom-[88px] bg-white rounded-2xl" />
             <div className="absolute bottom-[20px] left-9 z-10">

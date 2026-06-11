@@ -79,18 +79,10 @@ export const blogPostSchema = defineType({
     }),
     defineField({
       name: "image",
-      title: "Folder Image",
-      type: "string",
-      description: "Which folder SVG to use as the card image",
-      options: {
-        list: [
-          { title: "Folder 1 — Purple", value: "/assets/blog-1.svg" },
-          { title: "Folder 2 — Blue", value: "/assets/blog-2.svg" },
-          { title: "Folder 3 — Green/Yellow", value: "/assets/blog-3.svg" },
-        ],
-        layout: "radio",
-      },
-      initialValue: "/assets/blog-1.svg",
+      title: "Cover Image",
+      type: "image",
+      description: "Upload a cover image for the blog card and article header (recommended: 1200×800px)",
+      options: { hotspot: true },
     }),
     defineField({
       name: "featured",

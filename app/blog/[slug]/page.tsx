@@ -23,7 +23,9 @@ function RelatedCard({ slug, postType, readTime, publishedDate, title, excerpt, 
     <Link href={`/blog/${slug}`} className="bg-[#f4f4f4] rounded-2xl flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative shrink-0" style={{ height: "clamp(180px, 22vw, 300px)" }}>
         <div className="absolute inset-[11px_11px_0]">
-          <img src={image} alt="" className="w-full h-full" />
+          {image
+            ? <img src={image} alt="" className="w-full h-full object-cover rounded-t-xl" />
+            : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
         </div>
         <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
@@ -118,7 +120,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             style={{ height: "clamp(200px, 28vw, 460px)" }}
           >
             <div className="absolute inset-[14px_14px_0]">
-              <img src={post.image} alt="" className="w-full h-full" />
+              {post.image
+                ? <img src={post.image} alt="" className="w-full h-full object-cover rounded-t-xl" />
+                : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
             </div>
             <div className="absolute top-[24px] inset-x-[24px] bottom-[56px] bg-white rounded-2xl" />
             <div className="absolute bottom-[8px] left-8 z-10">

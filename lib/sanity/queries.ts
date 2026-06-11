@@ -47,7 +47,7 @@ export type SanityBlogPost = {
   readTime: string;
   publishedDate: string;
   excerpt: string;
-  image: string;
+  image: string | null;
   featured?: boolean;
   lead: string;
   sections: { heading: string; body: string }[];
@@ -130,7 +130,7 @@ const blogCardFields = `
   readTime,
   publishedDate,
   excerpt,
-  image,
+  "image": image.asset->url,
   featured,
 `;
 

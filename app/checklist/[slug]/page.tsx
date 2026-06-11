@@ -26,7 +26,7 @@ function BlogCard({
   date: string;
   title: string;
   excerpt: string;
-  img: string;
+  img: string | null;
   slug: string;
 }) {
   return (
@@ -36,7 +36,9 @@ function BlogCard({
     >
       <div className="relative shrink-0" style={{ height: "clamp(180px, 22vw, 320px)" }}>
         <div className="absolute inset-[11px_11px_0]">
-          <img src={img} alt="" className="w-full h-full" />
+          {img
+            ? <img src={img} alt="" className="w-full h-full object-cover rounded-t-xl" />
+            : <div className="w-full h-full bg-[#e8e8e8] rounded-t-xl" />}
         </div>
         <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
         <div className="absolute bottom-[6px] left-7 z-10">
