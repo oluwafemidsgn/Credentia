@@ -41,14 +41,19 @@ export default function Footer() {
             <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
               Pages
             </span>
-            {["Home", "Blog", "Buy me a coffee", "Contact"].map((item) => (
+            {[
+              { label: "Home", href: "/" },
+              { label: "Blog", href: "/blog" },
+              { label: "Buy us jollof", href: "/coffee" },
+              { label: "Contact", href: "/contact" },
+            ].map(({ label, href }) => (
               <Link
-                key={item}
-                href="#"
+                key={label}
+                href={href}
                 className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
                 style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
               >
-                {item}
+                {label}
               </Link>
             ))}
           </div>
@@ -75,7 +80,15 @@ export default function Footer() {
           style={{ fontSize: "clamp(10px, 0.8vw, 12px)" }}
         >
           <span className="text-[#505050]">© 2026 Credentia. Built for Lagos.</span>
-          <span className="text-[#505050]">No agent. No guessing. Free.</span>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="text-[#505050] hover:text-[#292929] transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-[#505050] hover:text-[#292929] transition-colors">
+              Terms
+            </Link>
+            <span className="text-[#505050]">No agent. No guessing. Free.</span>
+          </div>
         </div>
       </div>
     </footer>
