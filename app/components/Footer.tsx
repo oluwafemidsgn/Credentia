@@ -28,7 +28,7 @@ export default function Footer() {
             {["Education", "Travel", "Civic", "Work"].map((item) => (
               <Link
                 key={item}
-                href="#"
+                href={`/browse#${item.toLowerCase()}`}
                 className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
                 style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
               >
