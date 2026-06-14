@@ -13,11 +13,41 @@ const reasons = [
 
 export default function Contact() {
   const [subject, setSubject] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setSent(true);
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -42,8 +72,8 @@ export default function Contact() {
           className="font-medium leading-[1.6] text-[#505050] tracking-[-0.02em]"
           style={{ fontSize: "clamp(0.875rem, 1.1vw, 1.05rem)" }}
         >
-          Found something wrong? Want a checklist we haven't built? Just want to talk?
-          We read every message and reply within a day or two.
+Found something wrong? Want a checklist we haven&apos;t built? Just want to talk?
+            We read every message and reply within a day or two.
         </p>
       </section>
 
@@ -83,6 +113,8 @@ export default function Contact() {
                   <input
                     type="text"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
                     className="bg-[#f4f4f4] rounded-2xl px-5 py-4 font-medium text-[#232323] placeholder:text-[#9b9b9b] tracking-[-0.02em] outline-none focus:ring-2 focus:ring-[#ccbaf8] transition-all"
                     style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
@@ -95,6 +127,8 @@ export default function Contact() {
                   <input
                     type="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@email.com"
                     className="bg-[#f4f4f4] rounded-2xl px-5 py-4 font-medium text-[#232323] placeholder:text-[#9b9b9b] tracking-[-0.02em] outline-none focus:ring-2 focus:ring-[#ccbaf8] transition-all"
                     style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
@@ -133,6 +167,8 @@ export default function Contact() {
                 </label>
                 <textarea
                   required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   rows={6}
                   placeholder="Tell us what's on your mind…"
                   className="bg-[#f4f4f4] rounded-2xl px-5 py-4 font-medium text-[#232323] placeholder:text-[#9b9b9b] tracking-[-0.02em] outline-none focus:ring-2 focus:ring-[#ccbaf8] transition-all resize-none"
@@ -140,13 +176,23 @@ export default function Contact() {
                 />
               </div>
 
+              {error && (
+                <p className="text-[#be3738] text-sm mb-3" role="alert">
+                  {error}
+                </p>
+              )}
               <div>
                 <button
                   type="submit"
-                  className="bg-[#ccbaf8] hover:bg-[#b8a0f5] text-[#232323] font-medium tracking-[-0.03em] px-8 py-4 rounded-full transition-all active:scale-95"
+                  disabled={loading || !subject}
+                  className={`bg-[#ccbaf8] hover:bg-[#b8a0f5] text-[#232323] font-medium tracking-[-0.03em] px-8 py-4 rounded-full transition-all active:scale-95 ${
+                    loading || !subject
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   style={{ fontSize: "clamp(14px, 1vw, 16px)" }}
                 >
-                  Send message →
+                  {loading ? "Sending…" : "Send message →"}
                 </button>
               </div>
             </form>
