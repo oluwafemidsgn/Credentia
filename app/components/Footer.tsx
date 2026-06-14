@@ -25,14 +25,21 @@ export default function Footer() {
             <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
               Categories
             </span>
-            {["Education", "Travel", "Civic", "Work"].map((item) => (
+            {[
+              { label: "Civil Identity", href: "/browse#civil-identity" },
+              { label: "Travel & Immigration", href: "/browse#travel-immigration" },
+              { label: "Education", href: "/browse#education" },
+              { label: "Marriage & Family", href: "/browse#marriage-family" },
+              { label: "Employment", href: "/browse#employment" },
+              { label: "Browse all", href: "/browse" },
+            ].map(({ label, href }) => (
               <Link
-                key={item}
-                href={`/browse#${item.toLowerCase()}`}
+                key={label}
+                href={href}
                 className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
                 style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
               >
-                {item}
+                {label}
               </Link>
             ))}
           </div>
