@@ -164,6 +164,22 @@ export async function getRelatedBlogPosts(slug: string, count = 3): Promise<Sani
   );
 }
 
+/* ─── Sitemap ────────────────────────────────────────────── */
+
+export type SitemapEntry = { slug: string; updatedAt: string };
+
+export async function getChecklistsForSitemap(): Promise<SitemapEntry[]> {
+  return client.fetch(
+    `*[_type == "checklist" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }`
+  );
+}
+
+export async function getBlogPostsForSitemap(): Promise<SitemapEntry[]> {
+  return client.fetch(
+    `*[_type == "blogPost" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }`
+  );
+}
+
 /* ─── Search ─────────────────────────────────────────────── */
 
 export type SearchChecklist = {
