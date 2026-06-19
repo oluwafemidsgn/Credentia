@@ -32,7 +32,7 @@ export default function Coffee() {
           Built for Lagos,<br />by us
         </h1>
         <p className="font-medium leading-[1.6] text-[#505050] tracking-[-0.02em] max-w-[560px] mx-auto text-[13px] sm:text-[15px] md:text-[16px]">
-          Credentia is free and independent. No ads, no agents, no affiliate links.
+          Credentia is free for everyone in Lagos.
           If it has saved you a trip, a phone call, or a bribe — buying us jollof helps keep it that way.
         </p>
       </section>

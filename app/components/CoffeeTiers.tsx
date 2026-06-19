@@ -35,7 +35,9 @@ export default function CoffeeTiers() {
   const [customActive, setCustomActive] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "verifying" | "success" | "failed"
+  >("idle");
   const [scriptReady, setScriptReady] = useState(false);
 
   // Load Paystack inline script once.
@@ -99,10 +101,40 @@ export default function CoffeeTiers() {
           },
         ],
       },
-      callback: () => setStatus("success"),
+      callback: (res) => {
+        // Confirm with our server before celebrating.
+        verifyPayment(res.reference);
+      },
       onClose: () => {},
     });
     handler.openIframe();
+  }
+
+  async function verifyPayment(reference: string) {
+    setStatus("verifying");
+    setError("");
+    try {
+      const res = await fetch("/api/donate/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference }),
+      });
+      const data = await res.json();
+      if (res.ok && data.verified) {
+        setStatus("success");
+      } else {
+        setStatus("failed");
+        setError(
+          data.error ||
+            "We couldn't confirm your payment. If you were charged, email us and we'll sort it out."
+        );
+      }
+    } catch {
+      setStatus("failed");
+      setError(
+        "We couldn't confirm your payment. If you were charged, please contact us and we'll sort it out."
+      );
+    }
   }
 
   return (
@@ -209,25 +241,49 @@ export default function CoffeeTiers() {
 
             {status === "success" ? (
               <div className="rounded-full bg-[#3a6b4c] text-white font-medium tracking-[-0.02em] px-8 py-4 text-center text-[14px] sm:text-[15px]">
-                🎉 Thank you for the jollof!
+                🎉 Thank you for the jollof! Check your email for a receipt.
               </div>
             ) : (
               /* CTA */
               <button
                 onClick={handlePay}
-                disabled={!scriptReady}
+                disabled={!scriptReady || status === "verifying"}
                 className="bg-[#232323] hover:bg-[#111] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium tracking-[-0.02em] px-8 py-4 rounded-full transition-all active:scale-95 text-center text-[14px] sm:text-[15px]"
               >
-                Support Credentia →
+                {status === "verifying" ? "Confirming payment…" : "Support Credentia →"}
               </button>
             )}
           </div>
 
-          {/* Right — payment embed placeholder */}
-          <div className="w-full lg:w-1/2 rounded-[20px] border-2 border-dashed border-[#c8c8c8] bg-[#f4f4f4] flex items-center justify-center min-h-[280px] sm:min-h-[340px]">
-            <p className="font-medium uppercase tracking-[0.1em] text-[#b0b0b0] text-[10px] sm:text-[11px] text-center px-4">
-              Secured by Paystack — card, transfer & USSD
+          {/* Right — where the money goes */}
+          <div className="w-full lg:w-1/2 rounded-[20px] bg-[#351459] text-white p-7 sm:p-9 flex flex-col gap-6 min-h-[280px] sm:min-h-[340px]">
+            <p className="font-medium uppercase tracking-[0.12em] text-[#ccbaf8] text-[10px] sm:text-[11px]">
+              Where your jollof goes
             </p>
+
+            <ul className="flex flex-col gap-5 flex-1">
+              {[
+                { icon: "🌐", text: "Hosting & the credentia.site domain" },
+                { icon: "🔍", text: "Hours spent verifying every checklist by hand" },
+                { icon: "🍚", text: "The occasional plate that keeps us coding" },
+              ].map((item) => (
+                <li key={item.text} className="flex items-start gap-3">
+                  <span className="text-[1.25rem] leading-none mt-0.5">{item.icon}</span>
+                  <span className="text-[14px] sm:text-[15px] leading-[1.5] tracking-[-0.01em] text-white/90">
+                    {item.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="pt-5 border-t border-white/15">
+              <p className="font-display text-white leading-snug tracking-[-0.03em] text-[1.1rem] sm:text-[1.35rem]">
+                Free for everyone, always.
+              </p>
+              <p className="text-[#ccbaf8] text-[13px] sm:text-[14px] mt-1.5 tracking-[-0.01em]">
+                Built with care in Lagos — and secured by Paystack.
+              </p>
+            </div>
           </div>
         </div>
       </div>
