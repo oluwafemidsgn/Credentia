@@ -91,7 +91,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             </span>
           </div>
           <div
-            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-end px-10 md:px-16 pb-10 md:pb-14 gap-3 md:gap-5"
+            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-center px-10 md:px-16 py-8 md:py-10 gap-3 md:gap-5"
             style={{ backgroundColor: colors.bg }}
           >
             <p className="text-[#505050] tracking-[-0.02em]" style={{ fontSize: "clamp(11px, 0.85vw, 15px)" }}>

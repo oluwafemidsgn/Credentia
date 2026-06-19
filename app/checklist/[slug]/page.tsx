@@ -134,7 +134,7 @@ export default async function ChecklistPage({
           </div>
           {/* Body */}
           <div
-            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-end px-5 sm:px-10 md:px-16 pb-5 sm:pb-8 md:pb-14 gap-2 sm:gap-4 md:gap-6"
+            className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] flex flex-col justify-center px-5 sm:px-10 md:px-16 py-5 sm:py-8 md:py-10 gap-2 sm:gap-4 md:gap-6"
             style={{ backgroundColor: checklist.category.color }}
           >
             <p className="text-[#505050] tracking-[-0.02em] text-[11px] sm:text-[13px] md:text-[15px] hidden sm:block">
