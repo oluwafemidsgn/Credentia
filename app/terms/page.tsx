@@ -39,7 +39,7 @@ export default function TermsOfUse() {
     <LegalShell
       eyebrow="Legal"
       title="Terms of use"
-      lastUpdated="June 2026"
+      lastUpdated="June 20, 2026"
       toc={toc}
       intro={
         <p>
