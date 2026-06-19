@@ -32,7 +32,7 @@ const toc = [
   { id: "contact", label: "13. Contact" },
 ];
 
-const EMAIL = "info.dotbranding@gmail.com";
+const EMAIL = "credentia.online@gmail.com";
 
 export default function TermsOfUse() {
   return (

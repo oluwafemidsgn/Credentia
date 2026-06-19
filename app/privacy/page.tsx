@@ -31,7 +31,7 @@ const toc = [
   { id: "contact", label: "9. Contact & complaints" },
 ];
 
-const EMAIL = "info.dotbranding@gmail.com";
+const EMAIL = "credentia.online@gmail.com";
 
 export default function PrivacyPolicy() {
   return (

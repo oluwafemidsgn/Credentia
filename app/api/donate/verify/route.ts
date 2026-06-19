@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const OWNER_EMAIL = "info.dotbranding@gmail.com";
+const OWNER_EMAIL = "credentia.online@gmail.com";
 const FROM = "Credentia <onboarding@resend.dev>";
 
 export async function POST(request: NextRequest) {

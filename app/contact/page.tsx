@@ -223,11 +223,11 @@ Found something wrong? Want a checklist we haven&apos;t built? Just want to talk
                 Prefer email?
               </p>
               <a
-                href="mailto:info.dotbranding@gmail.com"
+                href="mailto:credentia.online@gmail.com"
                 className="font-display text-white leading-tight tracking-[-0.04em] hover:text-[#ccbaf8] transition-colors break-all"
                 style={{ fontSize: "clamp(1rem, 1.6vw, 1.4rem)" }}
               >
-                info.dotbranding<br />@gmail.com
+                credentia.online<br />@gmail.com
               </a>
             </div>
 
@@ -237,7 +237,7 @@ Found something wrong? Want a checklist we haven&apos;t built? Just want to talk
               className="border border-[#e0e0e0] rounded-[20px] p-8 flex flex-col gap-2 hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all group"
             >
               <p className="font-medium text-[#232323] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
-                ☕ Buy us a coffee
+                🍚 Buy us jollof
               </p>
               <p className="text-[#9b9b9b] tracking-[-0.02em]" style={{ fontSize: "clamp(12px, 0.85vw, 13px)" }}>
                 Credentia is free. Support helps keep it running.
