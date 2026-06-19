@@ -37,6 +37,7 @@ export type SanityChecklist = {
   };
   documents: SanityChecklistDocument[];
   relatedChecklists: { title: string; slug: string }[];
+  ad: { image: string | null; link: string; alt: string | null } | null;
 };
 
 export type SanityBlogPost = {
@@ -81,6 +82,11 @@ const checklistFields = `
   relatedChecklists[]-> {
     title,
     "slug": slug.current,
+  },
+  "ad": *[_type == "adSlot" && active == true && category._ref == ^.category._ref][0] {
+    "image": image.asset->url,
+    link,
+    alt,
   }
 `;
 

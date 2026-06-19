@@ -18,7 +18,7 @@ function InfoCard({ label, value }: { label: string; value: string }) {
 
 export default function ChecklistContent({ checklist }: { checklist: SanityChecklist }) {
   const [activeDoc, setActiveDoc] = useState(0);
-  const { category, title, location, updatedDate, sortedCount, documents, relatedChecklists } = checklist;
+  const { category, title, location, updatedDate, sortedCount, documents, relatedChecklists, ad } = checklist;
   const doc = documents[activeDoc];
 
   return (
@@ -94,7 +94,17 @@ export default function ChecklistContent({ checklist }: { checklist: SanityCheck
               {doc.description}
             </p>
 
-            <div className="bg-[#f4f4f4] rounded-2xl w-full" style={{ height: "clamp(140px, 20vw, 312px)" }} />
+            {ad?.image && ad?.link && (
+              <a
+                href={ad.link}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                className="block bg-[#f4f4f4] rounded-2xl w-full overflow-hidden"
+                style={{ height: "clamp(140px, 20vw, 312px)" }}
+              >
+                <img src={ad.image} alt={ad.alt ?? ""} className="w-full h-full object-cover" />
+              </a>
+            )}
           </div>
         </div>
       </div>
