@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      // Old support route renamed to /jollof — keep old links working.
+      { source: "/coffee", destination: "/jollof", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

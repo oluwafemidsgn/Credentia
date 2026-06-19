@@ -51,7 +51,7 @@ export default function Footer() {
             {[
               { label: "Home", href: "/" },
               { label: "Blog", href: "/blog" },
-              { label: "Buy us jollof", href: "/coffee" },
+              { label: "Buy us jollof", href: "/jollof" },
               { label: "Contact", href: "/contact" },
             ].map(({ label, href }) => (
               <Link

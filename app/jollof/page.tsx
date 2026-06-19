@@ -33,7 +33,7 @@ export default function Coffee() {
         </h1>
         <p className="font-medium leading-[1.6] text-[#505050] tracking-[-0.02em] max-w-[560px] mx-auto text-[13px] sm:text-[15px] md:text-[16px]">
           Credentia is free and independent. No ads, no agents, no affiliate links.
-          If it has saved you a trip, a phone call, or a bribe — buying us a coffee helps keep it that way.
+          If it has saved you a trip, a phone call, or a bribe — buying us jollof helps keep it that way.
         </p>
       </section>
 
@@ -95,21 +95,19 @@ export default function Coffee() {
       {/* ── Coffee CTA ────────────────────────────────────── */}
       <section className="px-4 sm:px-8 lg:px-20 pb-12 md:pb-24 max-w-[1920px] mx-auto">
         <div className="bg-[#351459] rounded-[20px] sm:rounded-[24px] px-5 sm:px-10 md:px-20 py-10 md:py-20 max-w-[900px] mx-auto text-center flex flex-col items-center gap-5 md:gap-8">
-          <p className="text-[2.5rem] sm:text-[3rem]">☕</p>
+          <p className="text-[2.5rem] sm:text-[3rem]">🍚</p>
           <h2 className="font-display text-white leading-tight tracking-[-0.04em] text-[1.5rem] sm:text-[2rem] md:text-[2.75rem]">
-            Buy us a coffee
+            Buy us jollof
           </h2>
           <p className="text-[#ccbaf8] leading-[1.6] tracking-[-0.02em] max-w-[480px] text-[13px] sm:text-[15px] md:text-[16px]">
-            Credentia costs money to run — hosting, domain, and the hours we spend keeping every checklist accurate. A coffee goes a long way.
+            Credentia costs money to run — hosting, domain, and the hours we spend keeping every checklist accurate. A plate of jollof goes a long way.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full sm:w-auto">
             <a
-              href="https://buymeacoffee.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#support"
               className="bg-[#ccbaf8] hover:bg-[#b8a0f5] text-[#232323] font-medium tracking-[-0.03em] px-7 py-3.5 rounded-full transition-all active:scale-95 whitespace-nowrap text-[13px] sm:text-[15px] w-full sm:w-auto text-center"
             >
-              Buy us a coffee →
+              Buy us jollof →
             </a>
             <Link
               href="/contact"

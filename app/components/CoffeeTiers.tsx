@@ -1,31 +1,115 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TIERS = [
-  { amount: "₦1k", label: "ONE COFFEE", value: 1000 },
-  { amount: "₦3k", label: "A FEW COFFEES", value: 3000, default: true },
-  { amount: "₦5k", label: "GENEROUS", value: 5000 },
+  { amount: "₦2k", label: "ONE PLATE", value: 2000 },
+  { amount: "₦5k", label: "A FEW PLATES", value: 5000, default: true },
+  { amount: "₦10k", label: "GENEROUS", value: 10000 },
 ];
 
+const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+// Minimal shape of the Paystack inline global we use.
+type PaystackHandler = { openIframe: () => void };
+type PaystackPop = {
+  setup: (opts: {
+    key: string;
+    email: string;
+    amount: number;
+    currency: string;
+    metadata?: Record<string, unknown>;
+    callback?: (res: { reference: string }) => void;
+    onClose?: () => void;
+  }) => PaystackHandler;
+};
+declare global {
+  interface Window {
+    PaystackPop?: PaystackPop;
+  }
+}
+
 export default function CoffeeTiers() {
-  const [selected, setSelected] = useState(3000);
+  const [selected, setSelected] = useState(5000);
   const [custom, setCustom] = useState("");
   const [customActive, setCustomActive] = useState(false);
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [scriptReady, setScriptReady] = useState(false);
+
+  // Load Paystack inline script once.
+  useEffect(() => {
+    if (window.PaystackPop) {
+      setScriptReady(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    script.onload = () => setScriptReady(true);
+    document.body.appendChild(script);
+  }, []);
 
   function handleTierClick(value: number) {
     setSelected(value);
     setCustomActive(false);
     setCustom("");
+    setError("");
   }
 
   function handleCustomClick() {
     setCustomActive(true);
     setSelected(0);
+    setError("");
+  }
+
+  function handlePay() {
+    const amount = customActive ? Number(custom) : selected;
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email for your receipt.");
+      return;
+    }
+    if (!amount || amount < 100) {
+      setError("Please choose or enter an amount of at least ₦100.");
+      return;
+    }
+    if (!PAYSTACK_KEY) {
+      setError("Payments aren't configured yet. Please try again later.");
+      return;
+    }
+    if (!window.PaystackPop) {
+      setError("Payment is still loading — please try again in a moment.");
+      return;
+    }
+
+    setError("");
+    const handler = window.PaystackPop.setup({
+      key: PAYSTACK_KEY,
+      email,
+      amount: Math.round(amount * 100), // Paystack expects kobo
+      currency: "NGN",
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "Purpose",
+            variable_name: "purpose",
+            value: "Buy us jollof — Credentia",
+          },
+        ],
+      },
+      callback: () => setStatus("success"),
+      onClose: () => {},
+    });
+    handler.openIframe();
   }
 
   return (
-    <section className="px-4 sm:px-8 lg:px-20 pb-14 md:pb-24 max-w-[1920px] mx-auto">
+    <section
+      id="support"
+      className="px-4 sm:px-8 lg:px-20 pb-14 md:pb-24 max-w-[1920px] mx-auto scroll-mt-[90px]"
+    >
       <div className="max-w-[900px] mx-auto">
         {/* Label */}
         <p className="font-medium uppercase tracking-[0.12em] text-[#232323] mb-4 text-[10px] sm:text-[11px]">
@@ -37,7 +121,7 @@ export default function CoffeeTiers() {
           <div className="w-full lg:w-1/2 flex flex-col gap-5">
             <div>
               <h2 className="font-display text-[#232323] leading-none tracking-[-0.04em] text-[1.75rem] sm:text-[2.25rem]">
-                Buy us a coffee
+                Buy us jollof
               </h2>
               <p className="text-[#505050] mt-2 text-[13px] sm:text-[14px] tracking-[-0.01em]">
                 One-off, no account needed.
@@ -106,21 +190,43 @@ export default function CoffeeTiers() {
               </span>
             </button>
 
-            {/* CTA */}
-            <a
-              href="https://buymeacoffee.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#232323] hover:bg-[#111] text-white font-medium tracking-[-0.02em] px-8 py-4 rounded-full transition-all active:scale-95 text-center text-[14px] sm:text-[15px]"
-            >
-              Support Credentia →
-            </a>
+            {/* Email */}
+            <input
+              type="email"
+              inputMode="email"
+              placeholder="Your email (for the receipt)"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError("");
+              }}
+              className="rounded-[16px] border border-[#d8d8d8] bg-white text-[#232323] placeholder-[#9b9b9b] px-5 py-4 outline-none focus:border-[#3a6b4c] transition-colors text-[14px] sm:text-[15px]"
+            />
+
+            {error && (
+              <p className="text-[#c0392b] text-[13px] tracking-[-0.01em]">{error}</p>
+            )}
+
+            {status === "success" ? (
+              <div className="rounded-full bg-[#3a6b4c] text-white font-medium tracking-[-0.02em] px-8 py-4 text-center text-[14px] sm:text-[15px]">
+                🎉 Thank you for the jollof!
+              </div>
+            ) : (
+              /* CTA */
+              <button
+                onClick={handlePay}
+                disabled={!scriptReady}
+                className="bg-[#232323] hover:bg-[#111] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium tracking-[-0.02em] px-8 py-4 rounded-full transition-all active:scale-95 text-center text-[14px] sm:text-[15px]"
+              >
+                Support Credentia →
+              </button>
+            )}
           </div>
 
           {/* Right — payment embed placeholder */}
           <div className="w-full lg:w-1/2 rounded-[20px] border-2 border-dashed border-[#c8c8c8] bg-[#f4f4f4] flex items-center justify-center min-h-[280px] sm:min-h-[340px]">
             <p className="font-medium uppercase tracking-[0.1em] text-[#b0b0b0] text-[10px] sm:text-[11px] text-center px-4">
-              Buy me a coffee / Paystack embed
+              Secured by Paystack — card, transfer & USSD
             </p>
           </div>
         </div>

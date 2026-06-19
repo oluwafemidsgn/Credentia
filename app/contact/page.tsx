@@ -233,7 +233,7 @@ Found something wrong? Want a checklist we haven&apos;t built? Just want to talk
 
             {/* Support link */}
             <Link
-              href="/coffee"
+              href="/jollof"
               className="border border-[#e0e0e0] rounded-[20px] p-8 flex flex-col gap-2 hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all group"
             >
               <p className="font-medium text-[#232323] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
