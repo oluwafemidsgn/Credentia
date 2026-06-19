@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Faculty_Glyphic } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,7 +48,10 @@ export default function RootLayout({
       className={`${inter.variable} ${facultyGlyphic.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
