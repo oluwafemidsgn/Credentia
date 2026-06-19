@@ -1,6 +1,6 @@
 # Privacy policy
 
-*Last updated: [Month Year]*
+*Last updated: June 20, 2026*
 
 Credentia is a free public directory. You don't need to create an account to use it. We don't ask for your name to search a checklist. We try to collect as little data as possible to make the site work and keep it useful.
 

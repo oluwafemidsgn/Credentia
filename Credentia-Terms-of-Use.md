@@ -1,6 +1,6 @@
 # Terms of use
 
-*Last updated: [Month Year]*
+*Last updated: June 20, 2026*
 
 *These terms apply to your use of Credentia and the Credentia website (credentia.ng). By using the site, you're agreeing to them. If you disagree with any part, please don't use the site.*
 
