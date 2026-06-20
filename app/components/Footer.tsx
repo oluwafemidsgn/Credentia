@@ -69,16 +69,29 @@ export default function Footer() {
             <span className="text-[11px] font-medium text-[#292929] uppercase tracking-wider mb-2">
               Follow
             </span>
-            {["Instagram", "X/Twitter", "Tiktok"].map((item) => (
-              <Link
-                key={item}
-                href="#"
-                className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
-                style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
-              >
-                {item}
-              </Link>
-            ))}
+            {[
+              {
+                label: "Instagram",
+                href: "https://www.instagram.com/credentia.site?igsh=MXZoODlhZ3Jzc2s1YQ==",
+              },
+              { label: "X/Twitter", href: "https://x.com/Credentia_site" },
+              { label: "Tiktok", href: "#" },
+            ].map(({ label, href }) => {
+              const external = href.startsWith("http");
+              return (
+                <Link
+                  key={label}
+                  href={href}
+                  {...(external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                  className="text-[#505050] hover:text-[#292929] transition-colors py-1.5 leading-none"
+                  style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
         </div>
 
