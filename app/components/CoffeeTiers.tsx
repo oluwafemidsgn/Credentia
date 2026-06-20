@@ -14,6 +14,7 @@ export default function CoffeeTiers() {
   const [customActive, setCustomActive] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
   const [status, setStatus] = useState<
     "idle" | "redirecting" | "verifying" | "success" | "failed"
   >("idle");
@@ -34,12 +35,14 @@ export default function CoffeeTiers() {
     setCustomActive(false);
     setCustom("");
     setError("");
+    setInfo("");
   }
 
   function handleCustomClick() {
     setCustomActive(true);
     setSelected(0);
     setError("");
+    setInfo("");
   }
 
   async function handlePay() {
@@ -55,7 +58,13 @@ export default function CoffeeTiers() {
     }
 
     setError("");
+    setInfo("");
     setStatus("redirecting");
+
+    // Open the tab synchronously inside the click so it isn't popup-blocked,
+    // then point it at the checkout URL once the server responds.
+    const checkoutTab = window.open("about:blank", "_blank");
+
     try {
       const res = await fetch("/api/donate/initialize", {
         method: "POST",
@@ -64,13 +73,23 @@ export default function CoffeeTiers() {
       });
       const data = await res.json();
       if (res.ok && data.authorization_url) {
-        // Hand off to Paystack's hosted checkout page.
-        window.location.href = data.authorization_url;
+        setStatus("idle");
+        if (checkoutTab) {
+          checkoutTab.location.href = data.authorization_url;
+          setInfo(
+            "Paystack opened in a new tab — complete your payment there. You'll see a confirmation once it's done."
+          );
+        } else {
+          // Popup blocked — fall back to redirecting this tab.
+          window.location.href = data.authorization_url;
+        }
       } else {
+        checkoutTab?.close();
         setStatus("idle");
         setError(data.error || "Couldn't start the payment. Please try again.");
       }
     } catch {
+      checkoutTab?.close();
       setStatus("idle");
       setError(
         "Couldn't start the payment. Please check your connection and try again."
@@ -205,6 +224,9 @@ export default function CoffeeTiers() {
 
             {error && (
               <p className="text-[#c0392b] text-[13px] tracking-[-0.01em]">{error}</p>
+            )}
+            {info && (
+              <p className="text-[#3a6b4c] text-[13px] tracking-[-0.01em]">{info}</p>
             )}
 
             {status === "success" ? (
