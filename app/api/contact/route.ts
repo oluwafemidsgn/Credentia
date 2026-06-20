@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     await resend.emails.send({
       from: "Credentia Contact <onboarding@resend.dev>",
-      to: "credentia.online@gmail.com",
+      to: "info.dotbranding@gmail.com",
       subject: `Contact: ${subject} — ${name}`,
       html: `
         <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
