@@ -8,27 +8,6 @@ const TIERS = [
   { amount: "₦10k", label: "GENEROUS", value: 10000 },
 ];
 
-const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
-
-// Minimal shape of the Paystack inline global we use.
-type PaystackHandler = { openIframe: () => void };
-type PaystackPop = {
-  setup: (opts: {
-    key: string;
-    email: string;
-    amount: number;
-    currency: string;
-    metadata?: Record<string, unknown>;
-    callback?: (res: { reference: string }) => void;
-    onClose?: () => void;
-  }) => PaystackHandler;
-};
-declare global {
-  interface Window {
-    PaystackPop?: PaystackPop;
-  }
-}
-
 export default function CoffeeTiers() {
   const [selected, setSelected] = useState(5000);
   const [custom, setCustom] = useState("");
@@ -36,21 +15,18 @@ export default function CoffeeTiers() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [status, setStatus] = useState<
-    "idle" | "verifying" | "success" | "failed"
+    "idle" | "redirecting" | "verifying" | "success" | "failed"
   >("idle");
-  const [scriptReady, setScriptReady] = useState(false);
 
-  // Load Paystack inline script once.
+  // When Paystack redirects back here after payment, confirm the reference.
   useEffect(() => {
-    if (window.PaystackPop) {
-      setScriptReady(true);
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://js.paystack.co/v1/inline.js";
-    script.async = true;
-    script.onload = () => setScriptReady(true);
-    document.body.appendChild(script);
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get("reference") ?? params.get("trxref");
+    if (!reference) return;
+    // Strip the reference from the URL so a refresh doesn't re-verify.
+    window.history.replaceState({}, "", window.location.pathname + "#support");
+    verifyPayment(reference);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleTierClick(value: number) {
@@ -66,7 +42,7 @@ export default function CoffeeTiers() {
     setError("");
   }
 
-  function handlePay() {
+  async function handlePay() {
     const amount = customActive ? Number(custom) : selected;
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -77,37 +53,29 @@ export default function CoffeeTiers() {
       setError("Please choose or enter an amount of at least ₦100.");
       return;
     }
-    if (!PAYSTACK_KEY) {
-      setError("Payments aren't configured yet. Please try again later.");
-      return;
-    }
-    if (!window.PaystackPop) {
-      setError("Payment is still loading — please try again in a moment.");
-      return;
-    }
 
     setError("");
-    const handler = window.PaystackPop.setup({
-      key: PAYSTACK_KEY,
-      email,
-      amount: Math.round(amount * 100), // Paystack expects kobo
-      currency: "NGN",
-      metadata: {
-        custom_fields: [
-          {
-            display_name: "Purpose",
-            variable_name: "purpose",
-            value: "Buy us jollof — Credentia",
-          },
-        ],
-      },
-      callback: (res) => {
-        // Confirm with our server before celebrating.
-        verifyPayment(res.reference);
-      },
-      onClose: () => {},
-    });
-    handler.openIframe();
+    setStatus("redirecting");
+    try {
+      const res = await fetch("/api/donate/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, amount }),
+      });
+      const data = await res.json();
+      if (res.ok && data.authorization_url) {
+        // Hand off to Paystack's hosted checkout page.
+        window.location.href = data.authorization_url;
+      } else {
+        setStatus("idle");
+        setError(data.error || "Couldn't start the payment. Please try again.");
+      }
+    } catch {
+      setStatus("idle");
+      setError(
+        "Couldn't start the payment. Please check your connection and try again."
+      );
+    }
   }
 
   async function verifyPayment(reference: string) {
@@ -247,10 +215,14 @@ export default function CoffeeTiers() {
               /* CTA */
               <button
                 onClick={handlePay}
-                disabled={!scriptReady || status === "verifying"}
+                disabled={status === "redirecting" || status === "verifying"}
                 className="bg-[#232323] hover:bg-[#111] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium tracking-[-0.02em] px-8 py-4 rounded-full transition-all active:scale-95 text-center text-[14px] sm:text-[15px]"
               >
-                {status === "verifying" ? "Confirming payment…" : "Support Credentia →"}
+                {status === "redirecting"
+                  ? "Opening Paystack…"
+                  : status === "verifying"
+                    ? "Confirming payment…"
+                    : "Support Credentia →"}
               </button>
             )}
           </div>
