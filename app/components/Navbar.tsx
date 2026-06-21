@@ -1,8 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import SearchBar from "./SearchBar";
+
+function SearchIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+  );
+}
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -15,6 +35,16 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Close the search overlay on Escape.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setSearchOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <>
@@ -52,30 +82,49 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <button
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
+              className="text-[#232323] hover:text-[#351459] transition-colors"
+            >
+              <SearchIcon />
+            </button>
           </div>
 
-          {/* Hamburger — mobile only */}
-          <button
-            className="md:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] shrink-0"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Close menu" : "Open menu"}
-          >
-            <span
-              className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 origin-center ${
-                open ? "translate-y-[7px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 ${
-                open ? "opacity-0 scale-x-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 origin-center ${
-                open ? "-translate-y-[7px] -rotate-45" : ""
-              }`}
-            />
-          </button>
+          {/* Mobile controls — search + hamburger */}
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={() => {
+                setSearchOpen(true);
+                setOpen(false);
+              }}
+              aria-label="Search"
+              className="w-9 h-9 flex items-center justify-center text-[#351459]"
+            >
+              <SearchIcon />
+            </button>
+            <button
+              className="flex flex-col justify-center items-center w-9 h-9 gap-[5px] shrink-0"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
+            >
+              <span
+                className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 origin-center ${
+                  open ? "translate-y-[7px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 ${
+                  open ? "opacity-0 scale-x-0" : ""
+                }`}
+              />
+              <span
+                className={`block h-[2px] w-5 bg-[#351459] rounded-full transition-all duration-300 origin-center ${
+                  open ? "-translate-y-[7px] -rotate-45" : ""
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -118,6 +167,31 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Search overlay */}
+      {searchOpen && (
+        <div className="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-24 sm:pt-28">
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setSearchOpen(false)}
+          />
+          <div className="relative w-full max-w-[640px]">
+            <div className="flex items-center justify-between mb-3 px-1">
+              <span className="text-white font-medium tracking-[-0.02em] text-[13px]">
+                Search Credentia
+              </span>
+              <button
+                onClick={() => setSearchOpen(false)}
+                aria-label="Close search"
+                className="text-white/80 hover:text-white text-[18px] leading-none"
+              >
+                ✕
+              </button>
+            </div>
+            <SearchBar white autoFocus onNavigate={() => setSearchOpen(false)} />
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -10,9 +10,13 @@ type Results = { checklists: Suggestion[]; blogs: Suggestion[] };
 export default function SearchBar({
   placeholder = "e.g first passport, uni admission, travel",
   white = false,
+  autoFocus = false,
+  onNavigate,
 }: {
   placeholder?: string;
   white?: boolean;
+  autoFocus?: boolean;
+  onNavigate?: () => void;
 }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Results>({ checklists: [], blogs: [] });
@@ -61,6 +65,7 @@ export default function SearchBar({
     if (!query.trim()) return;
     setOpen(false);
     router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+    onNavigate?.();
   }
 
   const hasResults = results.checklists.length > 0 || results.blogs.length > 0;
@@ -76,6 +81,7 @@ export default function SearchBar({
       >
         <input
           type="text"
+          autoFocus={autoFocus}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -104,7 +110,7 @@ export default function SearchBar({
                 <Link
                   key={item.slug}
                   href={`/checklist/${item.slug}`}
-                  onClick={() => { setOpen(false); setQuery(""); }}
+                  onClick={() => { setOpen(false); setQuery(""); onNavigate?.(); }}
                   className="flex items-center justify-between px-5 py-3 hover:bg-[#f9f5ff] transition-colors"
                 >
                   <span className="font-medium text-[#232323] tracking-[-0.02em] text-[14px]">
@@ -131,7 +137,7 @@ export default function SearchBar({
                 <Link
                   key={item.slug}
                   href={`/blog/${item.slug}`}
-                  onClick={() => { setOpen(false); setQuery(""); }}
+                  onClick={() => { setOpen(false); setQuery(""); onNavigate?.(); }}
                   className="flex items-center justify-between px-5 py-3 hover:bg-[#f9f5ff] transition-colors last:pb-4"
                 >
                   <span className="font-medium text-[#232323] tracking-[-0.02em] text-[14px]">
@@ -149,7 +155,7 @@ export default function SearchBar({
 
           <Link
             href={`/search?q=${encodeURIComponent(query)}`}
-            onClick={() => setOpen(false)}
+            onClick={() => { setOpen(false); onNavigate?.(); }}
             className="flex items-center gap-2 px-5 py-3 border-t border-[#f4f4f4] text-[#9b9b9b] hover:text-[#232323] hover:bg-[#f9f9f9] transition-colors"
             style={{ fontSize: "clamp(11px, 0.85vw, 13px)" }}
           >
