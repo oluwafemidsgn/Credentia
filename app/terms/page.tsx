@@ -189,9 +189,7 @@ export default function TermsOfUse() {
       <Section id="links" number={7} title="Third-party links and sources">
         <P>
           Every &ldquo;where to go&rdquo; entry on Credentia links to an official government
-          website, a real physical office address, or another authoritative public source. We do
-          not link to agents, fixers, or third parties who charge fees for information that should
-          be freely available.
+          website, a real physical office address, or another authoritative public source.
         </P>
         <P>
           We are not responsible for the content, accuracy, availability, or privacy practices of
