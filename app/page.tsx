@@ -2,7 +2,11 @@ import Link from "next/link";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
-import { getAllBlogPosts } from "../lib/sanity/queries";
+import {
+  getAllBlogPosts,
+  getFeaturedChecklists,
+  getHomeCategories,
+} from "../lib/sanity/queries";
 
 export const revalidate = 30;
 
@@ -13,31 +17,6 @@ function folderBg(slug: string) {
   const n = slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
   return FOLDER_SVGS[n % FOLDER_SVGS.length];
 }
-
-const categories = [
-  { name: "Identity", label: "IDENTITY", description: "NIN, national ID, passport, PVC, BVN", bg: "#ccbaf8", textColor: "#292929", descColor: "#505050", href: "/browse#civil-identity" },
-  { name: "Education", label: "EDUCATION", description: "Admission, results, NYSC, study abroad", bg: "#efd536", textColor: "#292929", descColor: "#505050", href: "/browse#education" },
-  { name: "Travel", label: "TRAVEL", description: "Passport, visa, yellow fever card", bg: "#73c2fb", textColor: "#292929", descColor: "#505050", href: "/browse#travel-immigration" },
-  { name: "Work", label: "EMPLOYMENT", description: "Civil service, private sector, contracts", bg: "#ffd166", textColor: "#292929", descColor: "#505050", href: "/browse#employment" },
-  { name: "Vehicle", label: "TRANSPORT", description: "Driver's licence, registration, papers", bg: "#ffb347", textColor: "#292929", descColor: "#505050", href: "/browse#transportation-vehicles" },
-  { name: "Property", label: "PROPERTY", description: "C of O, building permit, renting", bg: "#6f00ed", textColor: "#ffffff", descColor: "#d6d6d6", href: "/browse#real-estate-housing" },
-];
-
-const checklists = [
-  { title: "University Admission", category: "Education", count: "8 documents", slug: "university-admission" },
-  { title: "International Passport (New Application)", category: "Identity", count: "8 documents", slug: "international-passport-new" },
-  { title: "Permanent Voter's Card (PVC)", category: "Identity", count: "4 documents", slug: "permanent-voters-card" },
-  { title: "Private Sector Employment", category: "Employment", count: "8 documents", slug: "private-sector-employment" },
-];
-
-
-const quickTags = [
-  { label: "University admission", slug: "university-admission" },
-  { label: "International passport", slug: "international-passport-new" },
-  { label: "NIN enrollment", slug: "nin-enrollment" },
-  { label: "Driver's licence", slug: "drivers-license-first-time" },
-  { label: "Renting a property", slug: "renting-a-property" },
-];
 
 /* ─── Category Card ─────────────────────────────────────── */
 /*
@@ -53,7 +32,15 @@ function CategoryCard({
   textColor,
   descColor,
   href,
-}: (typeof categories)[0]) {
+}: {
+  name: string;
+  label: string;
+  description: string;
+  bg: string;
+  textColor: string;
+  descColor: string;
+  href: string;
+}) {
   return (
     <Link href={href} className="relative select-none group block" style={{ height: "clamp(220px, 18vw, 280px)" }}>
       {/* Inner wrapper — BOTH tab and card body live here so they move together */}
@@ -109,7 +96,12 @@ function CategoryCard({
 }
 
 /* ─── Checklist Card ────────────────────────────────────── */
-function ChecklistCard({ title, category, count, slug }: (typeof checklists)[0]) {
+function ChecklistCard({ title, category, count, slug }: {
+  title: string;
+  category: string;
+  count: number;
+  slug: string;
+}) {
   return (
     <Link
       href={`/checklist/${slug}`}
@@ -134,7 +126,7 @@ function ChecklistCard({ title, category, count, slug }: (typeof checklists)[0])
             className="text-[#505050] uppercase tracking-[-0.02em]"
             style={{ fontSize: "clamp(11px, 0.95vw, 16px)" }}
           >
-            {count}
+            {count} {count === 1 ? "document" : "documents"}
           </span>
         </div>
       </div>
@@ -242,7 +234,14 @@ function BlogCard({
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default async function Home() {
-  const blogPosts = (await getAllBlogPosts()).slice(0, 3);
+  const [allPosts, featuredChecklists, homeCategories] = await Promise.all([
+    getAllBlogPosts(),
+    getFeaturedChecklists(),
+    getHomeCategories(),
+  ]);
+  const blogPosts = allPosts.slice(0, 3);
+  const mostViewed = featuredChecklists.slice(0, 4);
+  const quickTags = featuredChecklists.slice(4, 10);
 
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">
@@ -353,7 +352,7 @@ export default async function Home() {
               className="border border-[#e0e0e0] font-medium text-[#232323] tracking-[-0.02em] px-4 py-2 rounded-full hover:border-[#ccbaf8] hover:bg-[#f9f5ff] active:scale-95 transition-all whitespace-nowrap shrink-0"
               style={{ fontSize: "clamp(11px, 0.9vw, 14px)" }}
             >
-              {tag.label}
+              {tag.title}
             </Link>
           ))}
         </div>
@@ -369,8 +368,8 @@ export default async function Home() {
         </h2>
         {/* 1 col → 2 col */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
-          {checklists.map((item) => (
-            <ChecklistCard key={item.title} {...item} />
+          {mostViewed.map((item) => (
+            <ChecklistCard key={item.slug} {...item} />
           ))}
         </div>
       </section>
@@ -394,8 +393,17 @@ export default async function Home() {
         </div>
         {/* 1 col → 2 col → 4 col */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10 overflow-visible">
-          {categories.map((cat) => (
-            <CategoryCard key={`${cat.name}-${cat.label}`} {...cat} />
+          {homeCategories.map((cat) => (
+            <CategoryCard
+              key={cat.id}
+              name={cat.name}
+              label={cat.label}
+              description={cat.description}
+              bg={cat.color}
+              textColor={cat.textColor}
+              descColor={cat.descColor}
+              href={`/browse#${cat.id}`}
+            />
           ))}
         </div>
       </section>

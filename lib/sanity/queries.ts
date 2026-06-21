@@ -104,6 +104,53 @@ export async function getChecklistBySlug(slug: string): Promise<SanityChecklist 
   );
 }
 
+/* ─── Homepage queries ──────────────────────────────────── */
+
+export type HomeChecklist = {
+  title: string;
+  slug: string;
+  category: string;
+  count: number;
+};
+
+// Most recently updated checklists — used for the homepage feature cards
+// and the quick-search pills.
+export async function getFeaturedChecklists(): Promise<HomeChecklist[]> {
+  return client.fetch(`
+    *[_type == "checklist"] | order(_updatedAt desc) [0...12] {
+      title,
+      "slug": slug.current,
+      "category": category->label,
+      "count": count(documents)
+    }
+  `);
+}
+
+export type HomeCategory = {
+  name: string;
+  label: string;
+  description: string;
+  color: string;
+  textColor: string;
+  descColor: string;
+  id: string;
+};
+
+// First N categories (by order) for the homepage "Browse by category" teaser.
+export async function getHomeCategories(): Promise<HomeCategory[]> {
+  return client.fetch(`
+    *[_type == "category"] | order(order asc) [0...6] {
+      "name": coalesce(homepageName, label),
+      label,
+      description,
+      color,
+      textColor,
+      descColor,
+      "id": id.current
+    }
+  `);
+}
+
 /* ─── Browse / category queries ─────────────────────────── */
 
 export async function getAllCategories(): Promise<SanityCategory[]> {
