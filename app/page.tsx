@@ -2,8 +2,17 @@ import Link from "next/link";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
+import { getAllBlogPosts } from "../lib/sanity/queries";
+
+export const revalidate = 30;
 
 /* ─── Data ─────────────────────────────────────────────── */
+
+const FOLDER_SVGS = ["/assets/blog-1.svg", "/assets/blog-2.svg", "/assets/blog-3.svg"];
+function folderBg(slug: string) {
+  const n = slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return FOLDER_SVGS[n % FOLDER_SVGS.length];
+}
 
 const categories = [
   { name: "Identity", label: "IDENTITY", description: "NIN, national ID, passport, PVC, BVN", bg: "#ccbaf8", textColor: "#292929", descColor: "#505050", href: "/browse#civil-identity" },
@@ -21,32 +30,6 @@ const checklists = [
   { title: "Private Sector Employment", category: "Employment", count: "8 documents", slug: "private-sector-employment" },
 ];
 
-const blogPosts = [
-  {
-    type: "Guide",
-    readTime: "6 MIN",
-    date: "MAY 2026",
-    title: "How to renew your passport in 2026",
-    excerpt: "The new NIS process, step by step.",
-    img: "/assets/blog-1.svg",
-  },
-  {
-    type: "Explainer",
-    readTime: "6 MIN",
-    date: "MAY 2026",
-    title: "NIN vs BVN: what's the difference?",
-    excerpt: "And why you need both.",
-    img: "/assets/blog-2.svg",
-  },
-  {
-    type: "News",
-    readTime: "6 MIN",
-    date: "MAY 2026",
-    title: "JAMB changes its 2026 requirements",
-    excerpt: "What's new for admission this year.",
-    img: "/assets/blog-3.svg",
-  },
-];
 
 const quickTags = [
   { label: "University admission", slug: "university-admission" },
@@ -164,9 +147,9 @@ function ChecklistCard({ title, category, count, slug }: (typeof checklists)[0])
 
 /* ─── Blog Card ─────────────────────────────────────────── */
 /*
- * Image area = just the coloured folder SVG. No white overlay.
- * The type tag (Guide / Explainer / News) sits on top of the
- * folder shape itself, bottom-left, as a frosted-glass pill.
+ * Three layers: coloured folder SVG, a white box holding the uploaded
+ * photo (if any), and the post-type pill on the exposed folder strip.
+ * Links to the article page at /blog/[slug].
  */
 function BlogCard({
   type,
@@ -174,30 +157,36 @@ function BlogCard({
   date,
   title,
   excerpt,
-  img,
-}: (typeof blogPosts)[0]) {
+  image,
+  slug,
+}: {
+  type: string;
+  readTime: string;
+  date: string;
+  title: string;
+  excerpt: string;
+  image: string | null;
+  slug: string;
+}) {
   return (
-    <article className="bg-[#f4f4f4] rounded-2xl flex-1 flex flex-col cursor-pointer group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <Link
+      href={`/blog/${slug}`}
+      className="bg-[#f4f4f4] rounded-2xl flex-1 flex flex-col group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    >
 
       {/* ── Image area ───────────────────────────────── */}
-      {/*
-       * Three layers (back → front):
-       *  1. Coloured L-shaped folder SVG — the "frame" / holder
-       *  2. White card overlay — the image container, slightly inset
-       *     from the folder so the colour peeks around all four edges
-       *  3. Type tag — sits on the visible folder strip at the bottom,
-       *     below the white card, so the folder "holds" the tag
-       */}
       <div className="relative shrink-0" style={{ height: "clamp(200px, 24vw, 340px)" }}>
         {/* Layer 1 — coloured folder SVG */}
         <div className="absolute inset-[11px_11px_0]">
-          <img src={img} alt="" className="w-full h-full" />
+          <img src={folderBg(slug)} alt="" className="w-full h-full" />
         </div>
 
-        {/* Layer 2 — white image-container frame */}
-        {/* top-[16px] and inset-x-[22px] so the folder colour peeks around;
-            bottom-[32px] leaves a ~32 px folder strip visible below for the tag */}
-        <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl" />
+        {/* Layer 2 — white image-container frame (holds the uploaded photo) */}
+        <div className="absolute top-[22px] inset-x-[22px] bottom-[52px] bg-white rounded-2xl overflow-hidden">
+          {image
+            ? <img src={image} alt="" className="w-full h-full object-cover" />
+            : <div className="w-full h-full bg-white" />}
+        </div>
 
         {/* Layer 3 — tag on the exposed folder strip */}
         <div className="absolute bottom-[6px] left-7 z-10">
@@ -247,12 +236,14 @@ function BlogCard({
           <span style={{ fontSize: "clamp(11px, 0.85vw, 14px)" }}>→</span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function Home() {
+export default async function Home() {
+  const blogPosts = (await getAllBlogPosts()).slice(0, 3);
+
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">
 
@@ -429,7 +420,16 @@ export default function Home() {
         {/* Stacked on mobile, side-by-side on desktop */}
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
           {blogPosts.map((post) => (
-            <BlogCard key={post.title} {...post} />
+            <BlogCard
+              key={post.slug}
+              slug={post.slug}
+              type={post.postType}
+              readTime={post.readTime}
+              date={post.publishedDate}
+              title={post.title}
+              excerpt={post.excerpt}
+              image={post.image}
+            />
           ))}
         </div>
       </section>
