@@ -246,27 +246,110 @@ export type SearchChecklist = {
 };
 export type SearchBlog = { title: string; slug: string; postType: string; excerpt: string; readTime: string; publishedDate: string };
 
+const CHECKLIST_SEARCH_PROJECTION = `
+  title,
+  "slug": slug.current,
+  "category": category->label,
+  "color": category->color,
+  "textColor": category->textColor,
+  "descColor": category->descColor,
+  "count": count(documents)
+`;
+const BLOG_SEARCH_PROJECTION = `
+  title, "slug": slug.current, postType, excerpt, readTime, publishedDate
+`;
+
+// Direct search: matches the query (as a word/prefix) across every text
+// field that carries meaning — not just the title.
 export async function searchSanity(q: string): Promise<{ checklists: SearchChecklist[]; blogs: SearchBlog[] }> {
-  if (!q.trim()) return { checklists: [], blogs: [] };
+  const term = q.trim();
+  if (!term) return { checklists: [], blogs: [] };
+  const params = { term: term + "*" };
   const [checklists, blogs] = await Promise.all([
     client.fetch<SearchChecklist[]>(
-      `*[_type == "checklist" && title match $q + "*"][0...24] {
-        title,
-        "slug": slug.current,
-        "category": category->label,
-        "color": category->color,
-        "textColor": category->textColor,
-        "descColor": category->descColor,
-        "count": count(documents)
-      }`,
-      { q }
+      `*[_type == "checklist" && (
+        title match $term ||
+        category->label match $term ||
+        count(documents[
+          title match $term ||
+          description match $term ||
+          where match $term ||
+          prereq match $term
+        ]) > 0
+      )][0...24] { ${CHECKLIST_SEARCH_PROJECTION} }`,
+      params
     ),
     client.fetch<SearchBlog[]>(
-      `*[_type == "blogPost" && title match $q + "*"][0...6] {
-        title, "slug": slug.current, postType, excerpt, readTime, publishedDate
-      }`,
-      { q }
+      `*[_type == "blogPost" && (
+        title match $term ||
+        excerpt match $term ||
+        lead match $term ||
+        postType match $term ||
+        count(sections[heading match $term || body match $term]) > 0 ||
+        count(takeaways[@ match $term]) > 0
+      )][0...10] { ${BLOG_SEARCH_PROJECTION} }`,
+      params
     ),
   ]);
+  return { checklists, blogs };
+}
+
+/* ─── Fuzzy "did you mean" fallback ──────────────────────── */
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length;
+  if (!m) return n;
+  if (!n) return m;
+  const dp = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const tmp = dp[j];
+      dp[j] = Math.min(dp[j] + 1, dp[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = tmp;
+    }
+  }
+  return dp[n];
+}
+
+function wordSim(q: string, w: string): number {
+  if (!w) return 0;
+  if (w.startsWith(q) || q.startsWith(w)) return 0.95;
+  return 1 - levenshtein(q, w) / Math.max(q.length, w.length);
+}
+
+// How close is the query to a piece of text (best word match or whole-string).
+function similarity(q: string, text: string): number {
+  const t = text.toLowerCase();
+  if (!t) return 0;
+  if (t.includes(q)) return 1;
+  let best = 1 - levenshtein(q, t) / Math.max(q.length, t.length);
+  for (const w of t.split(/[^a-z0-9]+/)) best = Math.max(best, wordSim(q, w));
+  return best;
+}
+
+// When a direct search finds nothing, surface the closest titles instead —
+// catches typos and "I didn't know that's what it's called" cases.
+export async function getCloseMatches(q: string): Promise<{ checklists: SearchChecklist[]; blogs: SearchBlog[] }> {
+  const norm = q.trim().toLowerCase();
+  if (norm.length < 2) return { checklists: [], blogs: [] };
+  const [allC, allB] = await Promise.all([
+    client.fetch<SearchChecklist[]>(`*[_type == "checklist"] { ${CHECKLIST_SEARCH_PROJECTION} }`),
+    client.fetch<SearchBlog[]>(`*[_type == "blogPost"] { ${BLOG_SEARCH_PROJECTION} }`),
+  ]);
+  const THRESH = 0.5;
+  const checklists = allC
+    .map((c) => ({ c, s: Math.max(similarity(norm, c.title), similarity(norm, c.category ?? "")) }))
+    .filter((x) => x.s >= THRESH)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 6)
+    .map((x) => x.c);
+  const blogs = allB
+    .map((b) => ({ b, s: similarity(norm, b.title) }))
+    .filter((x) => x.s >= THRESH)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 3)
+    .map((x) => x.b);
   return { checklists, blogs };
 }

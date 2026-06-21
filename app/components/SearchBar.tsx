@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Suggestion = { title: string; slug: string; category?: string; postType?: string };
-type Results = { checklists: Suggestion[]; blogs: Suggestion[] };
+type Results = { checklists: Suggestion[]; blogs: Suggestion[]; suggested?: boolean };
 
 export default function SearchBar({
   placeholder = "e.g first passport, uni admission, travel",
@@ -101,6 +101,11 @@ export default function SearchBar({
       {/* Dropdown */}
       {(open && hasResults) && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-[#f0f0f0] overflow-hidden z-50">
+          {results.suggested && (
+            <p className="px-5 pt-4 pb-1 text-[11px] font-medium text-[#9b9b9b] tracking-[-0.01em]">
+              No exact match. Did you mean:
+            </p>
+          )}
           {results.checklists.length > 0 && (
             <>
               <p className="px-5 pt-4 pb-2 text-[10px] font-medium text-[#9b9b9b] uppercase tracking-[0.08em]">

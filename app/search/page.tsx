@@ -2,7 +2,7 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
-import { searchSanity, getAllCategories } from "../../lib/sanity/queries";
+import { searchSanity, getCloseMatches, getAllCategories } from "../../lib/sanity/queries";
 import type { SearchChecklist, SearchBlog } from "../../lib/sanity/queries";
 
 export const dynamic = "force-dynamic";
@@ -101,8 +101,12 @@ export default async function SearchPage({
   const { checklists, blogs } = query ? await searchSanity(query) : { checklists: [], blogs: [] };
   const total = checklists.length + blogs.length;
 
-  // Popular suggestions for the empty / no-results state
-  const categories = total === 0 ? await getAllCategories() : [];
+  // No direct hits? Try the closest matches (typos / different wording).
+  const close = query && total === 0 ? await getCloseMatches(query) : { checklists: [], blogs: [] };
+  const closeTotal = close.checklists.length + close.blogs.length;
+
+  // Popular suggestions only when we have nothing at all to show
+  const categories = total === 0 && closeTotal === 0 ? await getAllCategories() : [];
   const popular = categories.flatMap((c) => c.checklists.slice(0, 1)).slice(0, 8);
 
   return (
@@ -140,8 +144,36 @@ export default async function SearchPage({
 
       <div className="px-5 sm:px-10 lg:px-20 max-w-[1920px] mx-auto pb-24">
 
+        {/* ── Closest matches (typos / different wording) ───── */}
+        {total === 0 && closeTotal > 0 && (
+          <>
+            <div className="max-w-[720px] mx-auto text-center mb-10 md:mb-12">
+              <p className="font-display text-[#232323] tracking-[-0.03em] mb-2" style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)" }}>
+                No exact match for &ldquo;{query}&rdquo;
+              </p>
+              <p className="text-[#9b9b9b] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
+                Here are the closest things we found. Did you mean one of these?
+              </p>
+            </div>
+            {close.checklists.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 mb-12">
+                {close.checklists.map((item) => (
+                  <ResultCard key={item.slug} {...item} />
+                ))}
+              </div>
+            )}
+            {close.blogs.length > 0 && (
+              <div className="flex flex-col gap-4 max-w-[900px]">
+                {close.blogs.map((item) => (
+                  <BlogResult key={item.slug} {...item} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
         {/* ── No results / empty ────────────────────────────── */}
-        {total === 0 && (
+        {total === 0 && closeTotal === 0 && (
           <div className="max-w-[720px] mx-auto text-center">
             {query && (
               <div className="bg-[#f4f4f4] rounded-[20px] px-8 py-10 mb-12">

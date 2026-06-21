@@ -75,7 +75,6 @@ export default function Footer() {
                 href: "https://www.instagram.com/credentia.site?igsh=MXZoODlhZ3Jzc2s1YQ==",
               },
               { label: "X/Twitter", href: "https://x.com/Credentia_site" },
-              { label: "Tiktok", href: "#" },
             ].map(({ label, href }) => {
               const external = href.startsWith("http");
               return (
