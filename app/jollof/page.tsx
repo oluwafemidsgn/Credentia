@@ -83,7 +83,7 @@ export default function Coffee() {
               The information you need to get a passport, register your NIN, or get into university exists. It is just scattered across government websites that are rarely updated, WhatsApp groups passing around outdated screenshots, and agents who charge you for access to things that are supposed to be public.
             </p>
             <p>
-              We wanted one place where you could type what you are trying to do and get a straight answer: what you need, what it costs, how long it takes, and where to go. No sign-up, no subscription, no middleman.
+              We wanted one place where you could type what you are trying to do and get a straight answer: what you need, what it costs, how long it takes, and where to go. No sign-up, no subscription, no stress.
             </p>
             <p>
               Lagos first because we know it best. The rest of Nigeria next. Everything verified by people who have actually done the process recently.

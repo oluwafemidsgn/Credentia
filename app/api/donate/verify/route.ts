@@ -122,7 +122,7 @@ function receiptHtml({
           Thank you for the jollof!
         </h1>
         <p style="color: #ccbaf8; font-size: 15px; line-height: 1.6; margin: 0;">
-          Your support keeps Credentia free, independent, and accurate for everyone in Lagos.
+          Your support keeps Credentia free and accurate for everyone in Lagos.
         </p>
       </div>
 

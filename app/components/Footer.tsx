@@ -107,7 +107,7 @@ export default function Footer() {
             <Link href="/terms" className="text-[#505050] hover:text-[#292929] transition-colors">
               Terms
             </Link>
-            <span className="text-[#505050]">No agent. No guessing. Free.</span>
+            <span className="text-[#505050]">Clear. Accurate. Free.</span>
           </div>
         </div>
       </div>

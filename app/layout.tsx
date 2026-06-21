@@ -19,12 +19,12 @@ const facultyGlyphic = Faculty_Glyphic({
 export const metadata: Metadata = {
   title: "Credentia: Every document for every step of life",
   description:
-    "The document directory for Lagos. Find exactly which documents you need for any life milestone. Free, no agent required.",
+    "The document directory for Lagos. Find exactly which documents you need for any life milestone. Completely free.",
   metadataBase: new URL("https://credentia.site"),
   openGraph: {
     title: "Credentia: Every document for every step of life",
     description:
-      "The document directory for Lagos. Find exactly which documents you need for any life milestone. Free, no agent required.",
+      "The document directory for Lagos. Find exactly which documents you need for any life milestone. Completely free.",
     url: "https://credentia.site",
     siteName: "Credentia",
     locale: "en_NG",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Credentia: Every document for every step of life",
     description:
-      "The document directory for Lagos. Find exactly which documents you need for any life milestone. Free, no agent required.",
+      "The document directory for Lagos. Find exactly which documents you need for any life milestone. Completely free.",
   },
 };
 
