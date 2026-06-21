@@ -334,7 +334,7 @@ export default async function Home() {
             className="font-medium leading-[1.4] text-[#232323] tracking-[-0.02em] max-w-[500px]"
             style={{ fontSize: "clamp(0.875rem, 1.1vw, 1rem)" }}
           >
-            Type it. We&apos;ll tell you every document you need, why, and where to get it.
+            Search, and find every document you need, why you need, and where to get them.
           </p>
         </div>
       </section>
