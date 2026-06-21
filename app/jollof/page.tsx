@@ -7,7 +7,7 @@ const team = [
   {
     name: "Ade",
     role: "Product & Research",
-    bio: "Ade spent years watching friends and family lose time and money to outdated document information — wrong offices, wrong fees, wrong forms. Credentia is his answer to that problem.",
+    bio: "Ade spent years watching friends and family lose time and money to outdated document information: wrong offices, wrong fees, wrong forms. Credentia is his answer to that problem.",
     color: "#ccbaf8",
   },
   {
@@ -33,7 +33,7 @@ export default function Coffee() {
         </h1>
         <p className="font-medium leading-[1.6] text-[#505050] tracking-[-0.02em] max-w-[560px] mx-auto text-[13px] sm:text-[15px] md:text-[16px]">
           Credentia is free for everyone in Lagos.
-          If it has saved you a trip, a phone call, or a bribe — buying us jollof helps keep it that way.
+          If it has saved you a trip, a phone call, or a bribe, buying us jollof helps keep it that way.
         </p>
       </section>
 
@@ -80,7 +80,7 @@ export default function Coffee() {
           </h2>
           <div className="flex flex-col gap-4 text-[#505050] leading-[1.75] tracking-[-0.01em] text-[13px] sm:text-[15px] md:text-[16px]">
             <p>
-              The information you need to get a passport, register your NIN, or get into university exists — it is just scattered across government websites that are rarely updated, WhatsApp groups passing around outdated screenshots, and agents who charge you for access to things that are supposed to be public.
+              The information you need to get a passport, register your NIN, or get into university exists. It is just scattered across government websites that are rarely updated, WhatsApp groups passing around outdated screenshots, and agents who charge you for access to things that are supposed to be public.
             </p>
             <p>
               We wanted one place where you could type what you are trying to do and get a straight answer: what you need, what it costs, how long it takes, and where to go. No sign-up, no subscription, no middleman.
@@ -100,7 +100,7 @@ export default function Coffee() {
             Buy us jollof
           </h2>
           <p className="text-[#ccbaf8] leading-[1.6] tracking-[-0.02em] max-w-[480px] text-[13px] sm:text-[15px] md:text-[16px]">
-            Credentia costs money to run — hosting, domain, and the hours we spend keeping every checklist accurate. A plate of jollof goes a long way.
+            Credentia costs money to run: hosting, domain, and the hours we spend keeping every checklist accurate. A plate of jollof goes a long way.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full sm:w-auto">
             <a

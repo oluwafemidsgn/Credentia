@@ -130,7 +130,7 @@ export default async function SearchPage({
         )}
         {!query && (
           <p className="font-medium text-[#9b9b9b] tracking-[-0.02em] mb-8" style={{ fontSize: "clamp(13px, 1vw, 16px)" }}>
-            Find any checklist or article — type the document, life situation, or category.
+            Find any checklist or article. Type the document, life situation, or category.
           </p>
         )}
         <div className="max-w-[720px] mx-auto">
@@ -149,7 +149,7 @@ export default async function SearchPage({
                   Nothing found for &ldquo;{query}&rdquo;
                 </p>
                 <p className="text-[#9b9b9b] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
-                  Try the document name, life situation, or category — e.g. &ldquo;passport&rdquo;, &ldquo;NIN&rdquo;, or &ldquo;marriage&rdquo;.
+                  Try the document name, life situation, or category, e.g. &ldquo;passport&rdquo;, &ldquo;NIN&rdquo;, or &ldquo;marriage&rdquo;.
                 </p>
               </div>
             )}

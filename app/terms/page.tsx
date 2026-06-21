@@ -11,7 +11,7 @@ import {
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: "Terms of use — Credentia",
+  title: "Terms of use | Credentia",
   description:
     "The terms that apply to your use of Credentia, a free public document directory for Lagos and Nigeria. Not a government office, legal service, or documentation agent.",
 };
@@ -52,7 +52,7 @@ export default function TermsOfUse() {
       <Section id="what-is" number={1} title="What Credentia is">
         <P>
           Credentia is a free public directory. It tells you what documents you&apos;ll likely need
-          for common life steps in Lagos and Nigeria — what to bring, why each one matters, and
+          for common life steps in Lagos and Nigeria: what to bring, why each one matters, and
           where to go to get it.
         </P>
         <P>
@@ -74,7 +74,7 @@ export default function TermsOfUse() {
         </P>
         <P>
           Document requirements change. Offices move. Fees increase. Government agencies revise
-          their processes — sometimes without public notice. Information that was accurate when we
+          their processes, sometimes without public notice. Information that was accurate when we
           last reviewed it may no longer be accurate by the time you read it.
         </P>
         <P>
@@ -90,8 +90,8 @@ export default function TermsOfUse() {
           <strong className="font-medium text-[#232323]">
             Before you act on any information from Credentia, please verify it directly with the
             relevant official source
-          </strong>{" "}
-          — the government office, the agency&apos;s official website, or the institution itself.
+          </strong>
+          : the government office, the agency&apos;s official website, or the institution itself.
           Especially for anything involving fees, physical addresses, processing times, or
           eligibility requirements.
         </Callout>
@@ -104,7 +104,7 @@ export default function TermsOfUse() {
         <P>
           Nothing on Credentia is legal advice, immigration advice, financial advice, or any other
           form of professional or official advice. We are a reference directory. The information we
-          publish is intended to help you understand what you will likely need — it does not
+          publish is intended to help you understand what you will likely need. It does not
           replace guidance from a qualified professional for your specific situation.
         </P>
         <P>
@@ -119,7 +119,7 @@ export default function TermsOfUse() {
           <strong className="font-medium text-[#232323]">
             Credentia and its founders accept no liability
           </strong>{" "}
-          for any loss, cost, damage, inconvenience, or harm — of any kind — arising from:
+          for any loss, cost, damage, inconvenience, or harm, of any kind, arising from:
         </P>
         <Bullets
           items={[
@@ -131,15 +131,15 @@ export default function TermsOfUse() {
         />
         <P>
           The information on this site is provided{" "}
-          <strong className="font-medium text-[#232323]">as is</strong>, without any warranty —
-          express or implied — of accuracy, completeness, fitness for a particular purpose, or
+          <strong className="font-medium text-[#232323]">as is</strong>, without any warranty,
+          express or implied, of accuracy, completeness, fitness for a particular purpose, or
           timeliness. To the fullest extent permitted by Nigerian law, we disclaim all such
           warranties.
         </P>
         <P>This limitation applies even if we had been informed that such a loss was possible.</P>
         <P>
-          If you are navigating a high-stakes process — a visa application, a property purchase, a
-          legal matter, a formal employment requirement — please verify every requirement with the
+          If you are navigating a high-stakes process (a visa application, a property purchase, a
+          legal matter, a formal employment requirement), please verify every requirement with the
           relevant official source before you act.
         </P>
       </Section>
@@ -202,8 +202,8 @@ export default function TermsOfUse() {
 
       <Section id="ip" number={8} title="Intellectual property">
         <P>
-          The written content on Credentia — the checklist entries, descriptions, blog posts, and
-          editorial copy — is owned by Credentia. The underlying factual information (what documents
+          The written content on Credentia, the checklist entries, descriptions, blog posts, and
+          editorial copy, is owned by Credentia. The underlying factual information (what documents
           a process requires) is public knowledge that no one can own. But the way it has been
           researched, organised, written, and structured is ours.
         </P>
@@ -223,7 +223,7 @@ export default function TermsOfUse() {
           items={[
             "All contributions are voluntary, gratuitous, and non-refundable",
             "A contribution does not entitle you to specific content, a premium service, priority support, or any commercial licence",
-            "Payments are processed by a third-party provider (Paystack or a similar service) — their own terms and conditions apply to the transaction itself",
+            "Payments are processed by a third-party provider (Paystack or a similar service), whose own terms and conditions apply to the transaction itself",
           ]}
         />
       </Section>
@@ -279,7 +279,7 @@ export default function TermsOfUse() {
           <strong className="font-medium text-[#232323]">
             &ldquo;Flag an issue&rdquo;
           </strong>{" "}
-          button on the relevant page — it reaches us faster and goes directly into our review
+          button on the relevant page. It reaches us faster and goes directly into our review
           queue.
         </P>
       </Section>
@@ -287,7 +287,7 @@ export default function TermsOfUse() {
       <Callout>
         <em className="text-[#505050]">
           Credentia is a free directory. It is not a government office, a legal service, or a
-          documentation agent. Know what you need — then verify it before you go.
+          documentation agent. Know what you need, then verify it before you go.
         </em>
       </Callout>
     </LegalShell>

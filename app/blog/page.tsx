@@ -25,7 +25,7 @@ export default async function Blog() {
           className="font-medium leading-[1.5] text-[#505050] tracking-[-0.02em] max-w-[640px] mx-auto mb-10"
           style={{ fontSize: "clamp(0.875rem, 1.1vw, 1.05rem)" }}
         >
-          Guides, explainers, and updates on Nigerian documents — so the news reaches you before the queue does.
+          Guides, explainers, and updates on Nigerian documents, so the news reaches you before the queue does.
         </p>
       </section>
 

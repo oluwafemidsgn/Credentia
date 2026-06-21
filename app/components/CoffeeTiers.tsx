@@ -77,7 +77,7 @@ export default function CoffeeTiers() {
         if (checkoutTab) {
           checkoutTab.location.href = data.authorization_url;
           setInfo(
-            "Paystack opened in a new tab — complete your payment there. You'll see a confirmation once it's done."
+            "Paystack opened in a new tab. Complete your payment there. You'll see a confirmation once it's done."
           );
         } else {
           // Popup blocked — fall back to redirecting this tab.
@@ -275,7 +275,7 @@ export default function CoffeeTiers() {
                 Free for everyone, always.
               </p>
               <p className="text-[#ccbaf8] text-[13px] sm:text-[14px] mt-1.5 tracking-[-0.01em]">
-                Built with care in Lagos — and secured by Paystack.
+                Built with care in Lagos, and secured by Paystack.
               </p>
             </div>
           </div>

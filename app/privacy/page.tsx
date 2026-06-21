@@ -14,7 +14,7 @@ import {
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: "Privacy policy — Credentia",
+  title: "Privacy policy | Credentia",
   description:
     "How Credentia collects, uses, and protects the small amount of data needed to run a free public document directory, in line with the NDPR and Nigeria Data Protection Act 2023.",
 };
@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
             "Pages visited and checklists viewed",
             "Search terms entered",
             "Time spent on pages",
-            "Approximate location (city or state level — not your precise address)",
+            "Approximate location (city or state level, not your precise address)",
             "Browser type and device type",
             "Referring website (how you arrived at Credentia)",
           ]}
@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
           results (telling us what to build next), and how to improve the experience for everyone.
         </Note>
         <Note label="Legal basis">
-          Legitimate interests — understanding usage helps us serve you better and keep the
+          Legitimate interests: understanding usage helps us serve you better and keep the
           directory accurate.
         </Note>
 
@@ -120,7 +120,7 @@ export default function PrivacyPolicy() {
           keeps the directory accurate.
         </Note>
         <Note label="Legal basis">
-          Legitimate interests — processing flags is how we maintain the accuracy you rely on.
+          Legitimate interests: processing flags is how we maintain the accuracy you rely on.
         </Note>
         <P>Your name and email are optional. You can submit a flag without them.</P>
 
@@ -131,19 +131,19 @@ export default function PrivacyPolicy() {
         </P>
         <Note label="Why">To respond to your enquiry.</Note>
         <Note label="Legal basis">
-          Legitimate interests — responding to messages you&apos;ve sent us.
+          Legitimate interests: responding to messages you&apos;ve sent us.
         </Note>
 
         <SubHeading>2d. If you support us financially</SubHeading>
         <P>
           If you make a voluntary contribution through our support page, your payment is handled by
           a third-party payment processor (Paystack or a similar service). We receive confirmation
-          that a contribution was made and the amount. We do not store your card details — those
+          that a contribution was made and the amount. We do not store your card details. Those
           remain with the payment processor under their own privacy policy.
         </P>
         <Note label="Why">To record the contribution for accounting purposes.</Note>
         <Note label="Legal basis">
-          Contractual necessity — processing the transaction you initiated.
+          Contractual necessity: processing the transaction you initiated.
         </Note>
       </Section>
 
@@ -163,7 +163,7 @@ export default function PrivacyPolicy() {
             [
               "Google AdSense",
               "Displays advertising to support the site",
-              "Advertising cookie — personalised",
+              "Advertising cookie, personalised",
             ],
             [
               "Supabase",
@@ -243,7 +243,7 @@ export default function PrivacyPolicy() {
           items={[
             "Sell your personal data to any party",
             "Share your data with agents, advertisers (beyond Google's standard mechanisms), or marketing lists",
-            "Transfer your data outside of Nigeria except where the services above require it (e.g. Google and Supabase infrastructure may be hosted outside Nigeria — we only use providers that comply with applicable data protection standards)",
+            "Transfer your data outside of Nigeria except where the services above require it (e.g. Google and Supabase infrastructure may be hosted outside Nigeria; we only use providers that comply with applicable data protection standards)",
           ]}
         />
       </Section>
@@ -386,7 +386,7 @@ export default function PrivacyPolicy() {
 
       <Callout>
         <em className="text-[#505050]">
-          Credentia is free to use and built to stay on your side — that includes how we handle the
+          Credentia is free to use and built to stay on your side. That includes how we handle the
           small amount of data we collect to keep it running.
         </em>
       </Callout>
