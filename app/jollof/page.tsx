@@ -11,9 +11,9 @@ const team = [
     color: "#ccbaf8",
   },
   {
-    name: "Your Partner",
-    role: "Design & Content",
-    bio: "Behind every clear explanation and every well-structured checklist is someone who cares deeply about getting the details right. That's the other half of this project.",
+    name: "Femi",
+    role: "Design & Engineering",
+    bio: "Ade came to Femi with a problem, and since they are both designers and builders, Femi helped turn the idea into a working product. Together they spotted a significant gap in how document information is shared, and they are doing their best to fix it in the ways they can.",
     color: "#efd536",
   },
 ];
