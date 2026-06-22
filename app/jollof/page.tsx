@@ -9,12 +9,14 @@ const team = [
     role: "Product & Research",
     bio: "Ade spent years watching friends and family lose time and money to outdated document information: wrong offices, wrong fees, wrong forms. Credentia is his answer to that problem.",
     color: "#ccbaf8",
+    img: "/assets/team/ade.jpg",
   },
   {
     name: "Femi",
     role: "Design & Engineering",
     bio: "Ade came to Femi with a problem, and since they are both designers and builders, Femi helped turn the idea into a working product. Together they spotted a significant gap in how document information is shared, and they are doing their best to fix it in the ways they can.",
     color: "#efd536",
+    img: "/assets/team/femi.jpg",
   },
 ];
 
@@ -42,13 +44,21 @@ export default function Coffee() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10 max-w-[900px] mx-auto">
           {team.map((person) => (
             <div key={person.name} className="rounded-[20px] overflow-hidden flex flex-col" style={{ backgroundColor: person.color }}>
-              {/* Avatar placeholder */}
-              <div className="h-[160px] sm:h-[200px] md:h-[240px] bg-white/30 flex items-center justify-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/60 flex items-center justify-center">
-                  <span className="font-display text-[#292929] tracking-[-0.04em] text-[1.25rem] sm:text-[1.75rem]">
-                    {person.name[0]}
-                  </span>
-                </div>
+              {/* Photo */}
+              <div className="h-[260px] sm:h-[320px] md:h-[360px] bg-white/30 flex items-center justify-center overflow-hidden">
+                {person.img ? (
+                  <img
+                    src={person.img}
+                    alt={person.name}
+                    className="w-full h-full object-cover object-[center_25%]"
+                  />
+                ) : (
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/60 flex items-center justify-center">
+                    <span className="font-display text-[#292929] tracking-[-0.04em] text-[1.25rem] sm:text-[1.75rem]">
+                      {person.name[0]}
+                    </span>
+                  </div>
+                )}
               </div>
               {/* Text */}
               <div className="p-5 sm:p-8 md:p-10 flex flex-col gap-2 sm:gap-3">
