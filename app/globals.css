@@ -23,6 +23,18 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Same-page anchor links (e.g. "Start writing ↓" on /contribute,
+     footer category links into /browse) glide instead of jumping. */
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   font-family: var(--font-inter), system-ui, sans-serif;
   color: #232323;
