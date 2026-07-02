@@ -49,7 +49,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-2xl border-b border-white/20">
-        <div className="flex items-center justify-between px-6 py-5 max-w-[860px] mx-auto w-full">
+        <div className="flex items-center justify-between px-6 py-4 max-w-[940px] mx-auto w-full">
           <Link
             href="/"
             className="flex items-center gap-1.5 shrink-0 hover:opacity-80 transition-opacity"
@@ -63,9 +63,9 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop links */}
+          {/* Desktop links — centered between logo and actions */}
           <div
-            className="hidden md:flex items-center gap-5 lg:gap-6 font-medium text-[#232323] tracking-[-0.02em]"
+            className="hidden md:flex flex-1 items-center justify-center gap-5 lg:gap-6 font-medium text-[#232323] tracking-[-0.02em]"
             style={{ fontSize: "clamp(13px, 1vw, 16px)" }}
           >
             {navLinks.map(({ label, href }) => {
@@ -82,6 +82,10 @@ export default function Navbar() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Desktop actions — search + contribute pill at the far end */}
+          <div className="hidden md:flex items-center gap-4 shrink-0">
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
@@ -89,6 +93,13 @@ export default function Navbar() {
             >
               <SearchIcon />
             </button>
+            <Link
+              href="/contribute"
+              className="bg-[#351459] hover:bg-[#4a1d7d] text-white font-medium tracking-[-0.02em] px-5 py-2.5 rounded-full transition-all active:scale-95 whitespace-nowrap"
+              style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
+            >
+              Contribute
+            </Link>
           </div>
 
           {/* Mobile controls — search + hamburger */}
@@ -164,6 +175,13 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/contribute"
+              onClick={() => setOpen(false)}
+              className="bg-[#351459] hover:bg-[#4a1d7d] text-white font-medium tracking-[-0.02em] text-[15px] text-center px-5 py-3.5 rounded-full transition-all active:scale-95 mt-4 mb-2"
+            >
+              Contribute
+            </Link>
           </div>
         </div>
       </div>

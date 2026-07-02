@@ -231,6 +231,22 @@ Found something wrong? Want a checklist we haven&apos;t built? Just want to talk
               </a>
             </div>
 
+            {/* Contribute link */}
+            <Link
+              href="/contribute"
+              className="border border-[#e0e0e0] rounded-[20px] p-8 flex flex-col gap-2 hover:border-[#ccbaf8] hover:bg-[#f9f5ff] transition-all group"
+            >
+              <p className="font-medium text-[#232323] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
+                📋 Have a full checklist to share?
+              </p>
+              <p className="text-[#9b9b9b] tracking-[-0.02em]" style={{ fontSize: "clamp(12px, 0.85vw, 13px)" }}>
+                Know the documents and steps for a process we haven&apos;t covered? Add it — we&apos;ll credit you.
+              </p>
+              <p className="text-[#351459] font-medium tracking-[-0.02em] opacity-0 group-hover:opacity-100 transition-opacity" style={{ fontSize: "clamp(12px, 0.85vw, 13px)" }}>
+                Add a checklist →
+              </p>
+            </Link>
+
             {/* Support link */}
             <Link
               href="/jollof"

@@ -19,6 +19,33 @@ export default function CoffeeTiers() {
     "idle" | "redirecting" | "verifying" | "success" | "failed"
   >("idle");
 
+  async function verifyPayment(reference: string) {
+    setStatus("verifying");
+    setError("");
+    try {
+      const res = await fetch("/api/donate/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference }),
+      });
+      const data = await res.json();
+      if (res.ok && data.verified) {
+        setStatus("success");
+      } else {
+        setStatus("failed");
+        setError(
+          data.error ||
+            "We couldn't confirm your payment. If you were charged, email us and we'll sort it out."
+        );
+      }
+    } catch {
+      setStatus("failed");
+      setError(
+        "We couldn't confirm your payment. If you were charged, please contact us and we'll sort it out."
+      );
+    }
+  }
+
   // When Paystack redirects back here after payment, confirm the reference.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -26,7 +53,10 @@ export default function CoffeeTiers() {
     if (!reference) return;
     // Strip the reference from the URL so a refresh doesn't re-verify.
     window.history.replaceState({}, "", window.location.pathname + "#support");
-    verifyPayment(reference);
+    // Deferred so the setState inside verifyPayment doesn't run synchronously
+    // within the effect (avoids a cascading re-render on mount).
+    const id = setTimeout(() => verifyPayment(reference), 0);
+    return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -93,33 +123,6 @@ export default function CoffeeTiers() {
       setStatus("idle");
       setError(
         "Couldn't start the payment. Please check your connection and try again."
-      );
-    }
-  }
-
-  async function verifyPayment(reference: string) {
-    setStatus("verifying");
-    setError("");
-    try {
-      const res = await fetch("/api/donate/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference }),
-      });
-      const data = await res.json();
-      if (res.ok && data.verified) {
-        setStatus("success");
-      } else {
-        setStatus("failed");
-        setError(
-          data.error ||
-            "We couldn't confirm your payment. If you were charged, email us and we'll sort it out."
-        );
-      }
-    } catch {
-      setStatus("failed");
-      setError(
-        "We couldn't confirm your payment. If you were charged, please contact us and we'll sort it out."
       );
     }
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { escapeHtml } from "../../../../lib/escapeHtml";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -80,8 +81,8 @@ export async function POST(request: NextRequest) {
             <h2 style="color: #232323; font-size: 22px; font-weight: 600;">New donation received</h2>
             <div style="background: #f4f4f4; border-radius: 12px; padding: 20px;">
               <p style="margin: 0 0 12px 0;"><strong>Amount:</strong> ${amountLabel}</p>
-              <p style="margin: 0 0 12px 0;"><strong>Donor:</strong> ${customerEmail ?? "—"}</p>
-              <p style="margin: 0 0 12px 0;"><strong>Reference:</strong> ${ref}</p>
+              <p style="margin: 0 0 12px 0;"><strong>Donor:</strong> ${customerEmail ? escapeHtml(customerEmail) : "—"}</p>
+              <p style="margin: 0 0 12px 0;"><strong>Reference:</strong> ${escapeHtml(ref)}</p>
               <p style="margin: 0;"><strong>When:</strong> ${dateLabel}</p>
             </div>
           </div>
@@ -128,7 +129,7 @@ function receiptHtml({
 
       <div style="background: #f4f4f4; border-radius: 12px; padding: 24px; margin-top: 20px;">
         <p style="margin: 0 0 12px 0; color: #232323;"><strong>Amount:</strong> ${amountLabel}</p>
-        <p style="margin: 0 0 12px 0; color: #232323;"><strong>Reference:</strong> ${ref}</p>
+        <p style="margin: 0 0 12px 0; color: #232323;"><strong>Reference:</strong> ${escapeHtml(ref)}</p>
         <p style="margin: 0; color: #232323;"><strong>Date:</strong> ${dateLabel}</p>
       </div>
 
