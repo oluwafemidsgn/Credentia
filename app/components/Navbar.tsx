@@ -49,7 +49,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-2xl border-b border-white/20">
-        <div className="flex items-center justify-between px-6 py-4 max-w-[1100px] mx-auto w-full">
+        <div className="flex items-center justify-between px-6 py-4 max-w-[940px] mx-auto w-full">
           <Link
             href="/"
             className="flex items-center gap-1.5 shrink-0 hover:opacity-80 transition-opacity"

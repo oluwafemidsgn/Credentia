@@ -72,6 +72,7 @@ export default function Contribute() {
   const [documents, setDocuments] = useState("");
   const [process, setProcess] = useState("");
   const [notes, setNotes] = useState("");
+  const [story, setStory] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -97,6 +98,7 @@ export default function Contribute() {
           documents,
           steps: process,
           notes,
+          story,
           name,
           email,
           phone,
@@ -125,6 +127,7 @@ export default function Contribute() {
     setDocuments("");
     setProcess("");
     setNotes("");
+    setStory("");
   }
 
   return (
@@ -197,12 +200,11 @@ export default function Contribute() {
             ✦ Built by people who&apos;ve been through it
           </p>
           <h1
-            className="font-display leading-[1.05] text-[#232323] tracking-[-0.04em]"
-            style={{ fontSize: "clamp(2.5rem, 6.5vw, 6rem)" }}
+            className="font-display leading-[1.08] text-[#232323] tracking-[-0.04em]"
+            style={{ fontSize: "clamp(1.85rem, 4.6vw, 4.25rem)" }}
           >
-            You know the wahala.
-            <br />
-            <span className="text-[#351459]">Share the shortcut.</span>
+            <span className="block whitespace-nowrap">You know the wahala.</span>
+            <span className="block whitespace-nowrap text-[#351459]">Share the shortcut.</span>
           </h1>
           <p
             className="font-medium leading-[1.5] text-[#505050] tracking-[-0.02em] max-w-[560px]"
@@ -354,11 +356,31 @@ export default function Contribute() {
               </div>
             </div>
 
-            {/* 04 — Take your credit */}
+            {/* 04 — Your story */}
+            <div className="bg-white border border-[#e9e9e9] rounded-[24px] p-7 sm:p-9 flex flex-col gap-5 shadow-sm">
+              <SectionTag n="04" color="#be3738" title="Gist us your story" hint="optional — how did it really go?" />
+              <div className="flex flex-col gap-2">
+                <label className={labelClass} style={{ fontSize: "clamp(12px, 0.9vw, 14px)" }}>
+                  Your experience, in your own words. The drama, the wins, the plot twists — with
+                  your permission we might share it on our socials (credited to you, of course).
+                </label>
+                <textarea
+                  maxLength={3000}
+                  value={story}
+                  onChange={(e) => setStory(e.target.value)}
+                  rows={5}
+                  placeholder={"e.g. I got to the office at 7am thinking I was early. The queue had queues…"}
+                  className={`${inputClass} resize-none`}
+                  style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
+                />
+              </div>
+            </div>
+
+            {/* 05 — Take your credit */}
             <div className="bg-[#351459] rounded-[24px] p-7 sm:p-9 flex flex-col gap-5">
               <div className="flex items-center gap-3">
                 <span className="w-8 h-8 rounded-full bg-[#efd536] flex items-center justify-center font-display text-[13px] text-[#232323] shrink-0">
-                  04
+                  05
                 </span>
                 <p className="font-display text-white tracking-[-0.03em]" style={{ fontSize: "clamp(1.05rem, 1.6vw, 1.35rem)" }}>
                   Take your credit

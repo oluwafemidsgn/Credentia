@@ -16,6 +16,7 @@ const LIMITS = {
   documents: 5000,
   steps: 5000,
   notes: 2000,
+  story: 3000,
 } as const;
 
 type Fields = Record<keyof typeof LIMITS, string>;
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
       documents: field(body, "documents"),
       steps: field(body, "steps"),
       notes: field(body, "notes"),
+      story: field(body, "story"),
     };
 
     if (!f.name || !f.email || !f.title || !f.documents) {
@@ -93,6 +95,12 @@ export async function POST(request: NextRequest) {
           <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
             <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Extra notes:</strong></p>
             <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.notes}</p>
+          </div>` : ""}
+
+          ${e.story ? `
+          <div style="background: #fdf6e3; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Their story (potential social content):</strong></p>
+            <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.story}</p>
           </div>` : ""}
 
           <div style="background: #351459; border-radius: 12px; padding: 20px;">
