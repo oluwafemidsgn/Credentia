@@ -442,6 +442,43 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Contribute CTA ─────────────────────────────── */}
+      <section className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto">
+        <div className="bg-[#351459] rounded-[24px] px-8 sm:px-12 lg:px-16 py-12 md:py-16 flex flex-col md:flex-row md:items-center gap-8 md:gap-12">
+          <div className="flex flex-col gap-4 flex-1">
+            <p
+              className="font-medium text-[#ccbaf8] uppercase tracking-[0.1em]"
+              style={{ fontSize: "clamp(10px, 0.85vw, 13px)" }}
+            >
+              Community
+            </p>
+            <h2
+              className="font-display text-white leading-tight tracking-[-0.04em]"
+              style={{ fontSize: "clamp(1.5rem, 3.2vw, 3rem)" }}
+            >
+              Know a checklist we&apos;re missing?
+            </h2>
+            <p
+              className="text-[#ccbaf8] leading-[1.6] tracking-[-0.02em] max-w-[560px]"
+              style={{ fontSize: "clamp(13px, 1vw, 16px)" }}
+            >
+              Credentia is built by people who&apos;ve been through the queue. Share
+              the documents and steps for a process you know — we&apos;ll verify it,
+              publish it, and credit you by name.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <Link
+              href="/contribute"
+              className="inline-block bg-[#ccbaf8] hover:bg-[#b8a0f5] text-[#232323] font-medium tracking-[-0.03em] px-8 py-4 rounded-full transition-all active:scale-95 whitespace-nowrap"
+              style={{ fontSize: "clamp(14px, 1vw, 16px)" }}
+            >
+              Add a checklist →
+            </Link>
+          </div>
+        </div>
+      </section>
+
 
       <Footer />
     </main>

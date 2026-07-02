@@ -29,9 +29,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Return the user to the support section after payment; CoffeeTiers reads
-    // the reference from the URL and verifies it.
+    // the reference from the URL and verifies it. Never trust the Origin
+    // header for the callback — a forged header could redirect donors to an
+    // attacker's site after paying.
     const origin =
-      request.headers.get("origin") ?? new URL(request.url).origin;
+      process.env.NODE_ENV === "production"
+        ? "https://credentia.site"
+        : new URL(request.url).origin;
 
     const res = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
