@@ -113,8 +113,11 @@ const doc = {
     "NYSC never sells postings, PPAs, or redeployments — anyone charging a fee for a \"good\" posting is running a scam.",
     "Preparation beats perfection: know the next step in front of you, and let the checklist handle the rest.",
   ],
-  // Links the end-of-article CTA to the existing NYSC Registration checklist.
-  ctaChecklist: { _type: "reference", _ref: "checklist-nysc-registration" },
+  // End-of-article CTAs: registration first (the reader's next step), then camp-day packing.
+  ctaChecklists: [
+    { _key: "cta-reg", _type: "reference", _ref: "checklist-nysc-registration" },
+    { _key: "cta-camp", _type: "reference", _ref: "checklist-nysc-camp-day" },
+  ],
 };
 
 const created = await client.createOrReplace(doc);

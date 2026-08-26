@@ -140,12 +140,12 @@ export const blogPostSchema = defineType({
       validation: (r) => r.min(2),
     }),
     defineField({
-      name: "ctaChecklist",
-      title: "Linked Checklist (CTA)",
-      type: "reference",
-      to: [{ type: "checklist" }],
+      name: "ctaChecklists",
+      title: "Linked Checklists (CTA)",
+      type: "array",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "checklist" }] })],
       description:
-        "Optional. If set, a \"Get the checklist\" call-to-action appears at the end of the article, linking to this checklist.",
+        "Optional. Each checklist added here appears as a \"Get the checklist\" call-to-action at the end of the article.",
     }),
   ],
   preview: {

@@ -194,30 +194,33 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* ── Checklist CTA ──────────────────────────────────── */}
-      {post.ctaChecklist && (
+      {/* ── Checklist CTA(s) ───────────────────────────────── */}
+      {post.ctaChecklists && post.ctaChecklists.length > 0 && (
         <div className="px-5 sm:px-10 lg:px-20 pb-4 max-w-[1920px] mx-auto">
-          <div className="max-w-[760px] mx-auto">
-            <div
-              className="rounded-[20px] flex flex-col sm:flex-row items-center justify-between gap-6 px-8 md:px-12 py-8 md:py-10"
-              style={{ backgroundColor: colors.bg }}
-            >
-              <div className="flex flex-col gap-1">
-                <p className="font-display text-[#292929] leading-tight tracking-[-0.04em]" style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)" }}>
-                  {post.ctaChecklist.title}
-                </p>
-                <p className="text-[#505050] tracking-[-0.02em]" style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}>
-                  A simple, printable checklist. Free, always.
-                </p>
-              </div>
-              <Link
-                href={`/checklist/${post.ctaChecklist.slug}`}
-                className="shrink-0 bg-[#292929] hover:bg-[#111] text-white font-medium tracking-[-0.03em] px-6 py-3 rounded-full transition-all active:scale-95 whitespace-nowrap"
-                style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
+          <div className="max-w-[760px] mx-auto flex flex-col gap-4">
+            {post.ctaChecklists.map((cta) => (
+              <div
+                key={cta.slug}
+                className="rounded-[20px] flex flex-col sm:flex-row items-center justify-between gap-6 px-8 md:px-12 py-8 md:py-10"
+                style={{ backgroundColor: colors.bg }}
               >
-                Get the checklist →
-              </Link>
-            </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-display text-[#292929] leading-tight tracking-[-0.04em]" style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)" }}>
+                    {cta.title}
+                  </p>
+                  <p className="text-[#505050] tracking-[-0.02em]" style={{ fontSize: "clamp(12px, 0.9vw, 15px)" }}>
+                    A simple, printable checklist. Free, always.
+                  </p>
+                </div>
+                <Link
+                  href={`/checklist/${cta.slug}`}
+                  className="shrink-0 bg-[#292929] hover:bg-[#111] text-white font-medium tracking-[-0.03em] px-6 py-3 rounded-full transition-all active:scale-95 whitespace-nowrap"
+                  style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}
+                >
+                  Get the checklist →
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       )}

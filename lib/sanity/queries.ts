@@ -53,7 +53,7 @@ export type SanityBlogPost = {
   lead: string;
   sections: { heading: string; body: string }[];
   takeaways: string[];
-  ctaChecklist?: { title: string; slug: string } | null;
+  ctaChecklists?: { title: string; slug: string }[] | null;
 };
 
 export type SanityBlogPostCard = Omit<SanityBlogPost, "lead" | "sections" | "takeaways">;
@@ -206,7 +206,7 @@ export async function getBlogPostBySlug(slug: string): Promise<SanityBlogPost | 
       lead,
       sections[] { heading, body },
       takeaways,
-      ctaChecklist-> { title, "slug": slug.current },
+      ctaChecklists[]-> { title, "slug": slug.current },
     }`,
     { slug }
   );
