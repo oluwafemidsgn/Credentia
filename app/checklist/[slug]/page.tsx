@@ -111,7 +111,11 @@ export default async function ChecklistPage({
 
   if (!checklist) notFound();
 
-  const blogPosts = allPosts.slice(0, 3);
+  // Lead the "From the blog" strip with this checklist's explicitly linked
+  // guide (if any), then backfill with recent posts — deduped, capped at 3.
+  const guide = checklist.relatedGuide;
+  const backfill = allPosts.filter((p) => p.slug !== guide?.slug).slice(0, guide ? 2 : 3);
+  const blogPosts = guide ? [guide, ...backfill] : backfill;
 
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">

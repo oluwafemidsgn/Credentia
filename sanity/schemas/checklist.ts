@@ -109,6 +109,14 @@ export const checklistSchema = defineType({
       type: "array",
       of: [defineArrayMember({ type: "reference", to: [{ type: "checklist" }] })],
     }),
+    defineField({
+      name: "relatedGuide",
+      title: "Related Guide (Blog Post)",
+      type: "reference",
+      to: [{ type: "blogPost" }],
+      description:
+        "Optional. If set, this blog post leads the \"From the blog\" section on the checklist page — wiring the checklist to its explainer guide.",
+    }),
   ],
   preview: {
     select: {

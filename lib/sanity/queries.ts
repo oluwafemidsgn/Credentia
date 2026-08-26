@@ -1,4 +1,4 @@
-import { client } from "./client";
+import { client, writeClient } from "./client";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -37,6 +37,7 @@ export type SanityChecklist = {
   };
   documents: SanityChecklistDocument[];
   relatedChecklists: { title: string; slug: string }[];
+  relatedGuide: SanityBlogPostCard | null;
   ad: { image: string | null; link: string; alt: string | null } | null;
 };
 
@@ -83,6 +84,17 @@ const checklistFields = `
   relatedChecklists[]-> {
     title,
     "slug": slug.current,
+  },
+  relatedGuide-> {
+    title,
+    "slug": slug.current,
+    postType,
+    category,
+    readTime,
+    publishedDate,
+    excerpt,
+    "image": image.asset->url,
+    featured,
   },
   "ad": *[_type == "adSlot" && active == true && category._ref == ^.category._ref][0] {
     "image": image.asset->url,
@@ -354,4 +366,69 @@ export async function getCloseMatches(q: string): Promise<{ checklists: SearchCh
     .slice(0, 3)
     .map((x) => x.b);
   return { checklists, blogs };
+}
+
+/* ─── Resources (email-gated downloads) ──────────────────── */
+
+// Card metadata shown publicly on /resources. Deliberately excludes the
+// actual file / link URL — that is only revealed by the API after an email
+// is captured, so the gate can't be bypassed by reading the page source.
+export type SanityResourceCard = {
+  title: string;
+  slug: string;
+  description: string;
+  category: string | null;
+  coverImage: string | null;
+  kind: "file" | "link";
+  featured: boolean;
+};
+
+export async function getAllResources(): Promise<SanityResourceCard[]> {
+  return client.fetch(`
+    *[_type == "resource" && (defined(file.asset) || defined(externalUrl))]
+      | order(featured desc, order asc, _createdAt desc) {
+        title,
+        "slug": slug.current,
+        "description": coalesce(description, ""),
+        category,
+        "coverImage": coverImage.asset->url,
+        "kind": select(defined(file.asset) => "file", "link"),
+        "featured": coalesce(featured, false),
+      }
+  `);
+}
+
+// Server-side only: resolves the real download destination for a slug.
+// Used by the /api/resource-lead route after the email has been stored.
+export async function getResourceDownload(
+  slug: string
+): Promise<{ title: string; url: string } | null> {
+  const r = await client.fetch<{ title: string; fileUrl: string | null; externalUrl: string | null } | null>(
+    `*[_type == "resource" && slug.current == $slug][0] {
+      title,
+      "fileUrl": file.asset->url,
+      externalUrl,
+    }`,
+    { slug }
+  );
+  if (!r) return null;
+  const url = r.fileUrl || r.externalUrl;
+  if (!url) return null;
+  return { title: r.title, url };
+}
+
+// Records a captured email against the resource it unlocked.
+export async function saveResourceLead(input: {
+  email: string;
+  resourceSlug: string;
+  resourceTitle: string;
+  createdAt: string;
+}): Promise<void> {
+  await writeClient.create({
+    _type: "resourceLead",
+    email: input.email,
+    resourceSlug: input.resourceSlug,
+    resourceTitle: input.resourceTitle,
+    createdAt: input.createdAt,
+  });
 }

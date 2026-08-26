@@ -28,6 +28,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Browse", href: "/browse" },
   { label: "Blog", href: "/blog" },
+  { label: "Resources", href: "/resources" },
   { label: "Buy us jollof", href: "/jollof" },
   { label: "Contact", href: "/contact" },
 ];
