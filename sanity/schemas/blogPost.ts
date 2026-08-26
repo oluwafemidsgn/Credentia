@@ -139,6 +139,14 @@ export const blogPostSchema = defineType({
       of: [defineArrayMember({ type: "string" })],
       validation: (r) => r.min(2),
     }),
+    defineField({
+      name: "ctaChecklist",
+      title: "Linked Checklist (CTA)",
+      type: "reference",
+      to: [{ type: "checklist" }],
+      description:
+        "Optional. If set, a \"Get the checklist\" call-to-action appears at the end of the article, linking to this checklist.",
+    }),
   ],
   preview: {
     select: {
