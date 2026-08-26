@@ -22,10 +22,24 @@ export default defineConfig({
             S.listItem()
               .title("📰 Blog Posts")
               .child(S.documentTypeList("blogPost").title("Blog Posts")),
+            S.listItem()
+              .title("📥 Resources")
+              .child(S.documentTypeList("resource").title("Resources")),
+            S.divider(),
+            S.listItem()
+              .title("✉️ Resource Leads (Captured Emails)")
+              .child(
+                S.documentTypeList("resourceLead")
+                  .title("Captured Emails")
+                  .defaultOrdering([{ field: "createdAt", direction: "desc" }])
+              ),
             S.divider(),
             S.listItem()
               .title("🗂 Categories")
               .child(S.documentTypeList("category").title("Categories")),
+            S.listItem()
+              .title("📢 Ad Slots")
+              .child(S.documentTypeList("adSlot").title("Ad Slots")),
           ]),
     }),
   ],

@@ -6,7 +6,6 @@ export const resourceLeadSchema = defineType({
   name: "resourceLead",
   title: "Resource Lead (Captured Email)",
   type: "document",
-  readOnly: true,
   fields: [
     defineField({ name: "email", title: "Email", type: "string" }),
     defineField({ name: "resourceTitle", title: "Resource", type: "string" }),
