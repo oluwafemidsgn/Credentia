@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Generous caps — real submissions fit comfortably; abuse doesn't.
@@ -64,6 +62,7 @@ export async function POST(request: NextRequest) {
       Object.entries(f).map(([k, v]) => [k, escapeHtml(v)])
     ) as Fields;
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "Credentia Contribution <onboarding@resend.dev>",
       to: "info.dotbranding@gmail.com",

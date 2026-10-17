@@ -3,7 +3,6 @@ import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
 import { getResourceDownload, saveResourceLead } from "../../../lib/sanity/queries";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function clean(value: unknown, max: number): string {
@@ -47,6 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Notify by email too (best-effort — never block the download on this).
     if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
       resend.emails
         .send({
           from: "Credentia Resources <onboarding@resend.dev>",

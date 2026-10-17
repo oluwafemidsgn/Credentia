@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function clean(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
@@ -37,6 +35,7 @@ export async function POST(request: NextRequest) {
     const eSubject = escapeHtml(subject);
     const eMessage = escapeHtml(message);
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "Credentia Contact <onboarding@resend.dev>",
       to: "info.dotbranding@gmail.com",
