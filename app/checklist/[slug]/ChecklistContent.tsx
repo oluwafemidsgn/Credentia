@@ -2,23 +2,59 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { SanityChecklist } from "../../../lib/sanity/queries";
+import { Linkify } from "../../../lib/linkify";
+import { mapsUrl } from "../../../lib/maps";
 
-function InfoCard({ label, value }: { label: string; value: string }) {
+function MapPin() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-[13px] h-[13px] shrink-0" fill="none" aria-hidden="true">
+      <path
+        d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function InfoCard({
+  label,
+  value,
+  maps,
+}: {
+  label: string;
+  value: string;
+  /** When set, the card gets an "Open in Google Maps" link for this place. */
+  maps?: string | null;
+}) {
   return (
     <div className="bg-[#f4f4f4] rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col gap-1.5">
       <p className="text-[#505050] uppercase tracking-wider text-[9px] sm:text-[10px]">
         {label}
       </p>
       <p className="font-display text-[#292929] leading-tight tracking-[-0.02em] text-[13px] sm:text-[16px] md:text-[18px]">
-        {value}
+        <Linkify text={value} />
       </p>
+      {maps && (
+        <a
+          href={maps}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1.5 inline-flex items-center gap-1.5 self-start rounded-full border border-[#e0e0e0] bg-white px-3 py-1.5 font-medium text-[#232323] tracking-[-0.02em] transition-all hover:border-[#ccbaf8] hover:bg-[#f9f5ff] active:scale-95 text-[11px] sm:text-[12px]"
+        >
+          <MapPin />
+          Open in Google Maps
+        </a>
+      )}
     </div>
   );
 }
 
 export default function ChecklistContent({ checklist }: { checklist: SanityChecklist }) {
   const [activeDoc, setActiveDoc] = useState(0);
-  const { category, title, location, updatedDate, sortedCount, documents, relatedChecklists, ad } = checklist;
+  const { category, title, location, documents, relatedChecklists, ad } = checklist;
   const doc = documents[activeDoc];
 
   return (
@@ -84,14 +120,14 @@ export default function ChecklistContent({ checklist }: { checklist: SanityCheck
             </h2>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
-              <InfoCard label="Where" value={doc.where} />
+              <InfoCard label="Where" value={doc.where} maps={mapsUrl(doc.where, location)} />
               <InfoCard label="Cost" value={doc.cost} />
               <InfoCard label="Time" value={doc.time} />
               <InfoCard label="You'll need first" value={doc.prereq} />
             </div>
 
             <p className="text-[#505050] leading-[1.6] tracking-[-0.02em] mb-6 sm:mb-8 text-[13px] sm:text-[14px] md:text-[15px]">
-              {doc.description}
+              <Linkify text={doc.description} />
             </p>
 
             {ad?.image && ad?.link && (

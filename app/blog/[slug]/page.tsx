@@ -6,6 +6,7 @@ import { getBlogPostBySlug, getAllBlogSlugs, getRelatedBlogPosts } from "../../.
 
 export const revalidate = 30;
 import type { SanityBlogPostCard } from "../../../lib/sanity/queries";
+import { Linkify } from "../../../lib/linkify";
 
 export async function generateStaticParams() {
   const slugs = await getAllBlogSlugs();
@@ -160,7 +161,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     className="text-[#505050] leading-[1.75] tracking-[-0.01em] mb-4 last:mb-0"
                     style={{ fontSize: "clamp(14px, 1vw, 17px)" }}
                   >
-                    {para}
+                    <Linkify text={para} />
                   </p>
                 ))}
               </div>
