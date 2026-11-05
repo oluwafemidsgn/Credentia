@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
+import WhatsNewTour from "./components/WhatsNewTour";
 import {
   getAllBlogPosts,
   getFeaturedChecklists,
@@ -481,6 +482,9 @@ export default async function Home() {
 
 
       <Footer />
+
+      {/* Home page only — checklist pages stay free of pop-ups */}
+      <WhatsNewTour />
     </main>
   );
 }
