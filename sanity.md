@@ -16,13 +16,21 @@ This keeps the CMS accessible to editors without a separate Sanity-hosted studio
 
 ## Document types
 
-Three schemas, each with a clear, non-overlapping responsibility:
+Six schemas, each with a clear, non-overlapping responsibility:
 
 | Schema | Purpose |
 |---|---|
 | `category` | Topic areas (Education, Travel, etc.) with color system |
 | `checklist` | Document checklists linked to a category |
 | `blogPost` | Editorial content: guides, explainers, news |
+| `adSlot` | Sponsor banner, shown on every checklist in one category |
+| `resource` | Downloadable PDF or link, email-gated on `/resources` |
+| `resourceLead` | One captured email per download, written by `/api/resource-lead` |
+
+The first three are the original editorial core. The last three came with
+sponsorship and lead capture, and are listed separately in the Studio sidebar
+(see `sanity.config.ts`) so editors are not shown lead records next to content
+they actually write.
 
 ---
 

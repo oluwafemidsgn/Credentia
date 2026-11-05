@@ -21,21 +21,28 @@ app/
   checklist/[slug]/   — individual checklist detail pages
   blog/               — blog index (filter pills, featured post, grid)
   blog/[slug]/        — blog article pages
-  coffee/             — support / buy-us-a-coffee page
+  guides/             — hand-built long-form guides (not CMS-driven)
+  resources/          — email-gated PDF downloads
+  contribute/         — community checklist submissions
+  jollof/             — support page, Paystack donations (/coffee redirects here)
   contact/            — contact form
   search/             — search results
+  privacy/, terms/    — legal pages
+  api/                — contact, contribute, resource-lead, donate, search
   studio/             — embedded Sanity Studio at /studio
   components/         — Navbar, Footer, shared components
   icon.png            — auto-served as favicon (192×192)
   favicon.ico         — multi-size ICO (16/32/48px), overrides browser default
   opengraph-image.png — static 1200×630 OG share image
 
-lib/sanity/
-  client.ts           — Sanity client config
-  queries.ts          — all GROQ queries + TypeScript types
+lib/
+  escapeHtml.ts       — escape user input before it goes into email HTML
+  sanity/client.ts    — read client + server-only write client
+  sanity/queries.ts   — all GROQ queries + TypeScript types
 
 sanity/
-  schemas/            — category, checklist, blogPost schemas
+  schemas/            — category, checklist, blogPost,
+                        adSlot, resource, resourceLead
   sanity.config.ts    — Studio config
 
 public/assets/        — blog-1.svg, blog-2.svg, blog-3.svg (folder backgrounds)
