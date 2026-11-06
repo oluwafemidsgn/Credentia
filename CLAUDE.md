@@ -105,3 +105,4 @@ Vercel auto-deploys on push to `main`. The `credentia.site` custom domain is con
 - `NEXT_PUBLIC_SANITY_PROJECT_ID` — Sanity project ID
 - `NEXT_PUBLIC_SANITY_DATASET` — usually `production`
 - `SANITY_API_TOKEN` — write token for Sanity mutations (if needed)
+- `SLACK_WEBHOOK_URL` — Slack Incoming Webhook for inbound notifications (downloads, contributions, contact). Server-only; never prefix with `NEXT_PUBLIC_`. Unset is a safe no-op.

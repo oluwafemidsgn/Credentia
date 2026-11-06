@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
+import { notifySlack } from "../../../lib/slack";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -57,6 +58,28 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Ping Slack first and unconditionally: it runs after the response and
+    // never throws, so the contribution lands in the channel even if the
+    // email below fails.
+    notifySlack({
+      heading: "📝 New checklist contribution",
+      summary: `Checklist contribution: ${f.title} from ${f.name}`,
+      fields: [
+        { label: "Checklist", value: f.title },
+        { label: "Category", value: f.category || "—" },
+        { label: "From", value: f.name },
+        { label: "Email", value: f.email },
+        { label: "Phone", value: f.phone || "—" },
+      ],
+      bodies: [
+        { label: "Documents needed", value: f.documents },
+        { label: "Process / steps", value: f.steps },
+        { label: "Extra notes", value: f.notes },
+        { label: "Their story (potential social content)", value: f.story },
+      ],
+      footer: "credentia.site/contribute — verify before publishing",
+    });
 
     const e = Object.fromEntries(
       Object.entries(f).map(([k, v]) => [k, escapeHtml(v)])

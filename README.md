@@ -42,6 +42,32 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
 NEXT_PUBLIC_SANITY_DATASET=production
 ```
 
+Optional, server-only:
+
+```
+# Slack Incoming Webhook — posts resource downloads, checklist contributions
+# and contact messages into a channel. Leave it unset to disable.
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/T000/B000/xxxxxxxx
+```
+
+To create the webhook, go to api.slack.com/apps → **Create New App**, then take
+either path:
+
+**From a manifest** (fastest): choose the workspace, paste the contents of
+[`slack-app-manifest.json`](slack-app-manifest.json), review, and **Create**.
+Incoming webhooks are already switched on in it.
+
+**From scratch:** name the app and pick the workspace, then open **Incoming
+Webhooks** in the sidebar and toggle *Activate Incoming Webhooks* on.
+
+Either way, finish with **Add New Webhook to Workspace** → choose the channel →
+**Allow**, then copy the URL under *Webhook URLs for Your Workspace*. Paste it
+into `.env.local` and into the Vercel project's Environment Variables (all
+environments), then redeploy.
+
+The manifest requests one scope, `incoming-webhook`, which only allows posting
+to the single channel you pick. It cannot read messages.
+
 ## Project structure
 
 ```

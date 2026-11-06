@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
+import { notifySlack } from "../../../lib/slack";
 import { getResourceDownload, saveResourceLead } from "../../../lib/sanity/queries";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,6 +43,19 @@ export async function POST(request: NextRequest) {
       resourceSlug: slug,
       resourceTitle: resource.title,
       createdAt,
+    });
+
+    // Ping Slack (best-effort — runs after the response, never throws).
+    notifySlack({
+      heading: "📥 New resource download",
+      summary: `Resource download: ${resource.title} (${email})`,
+      fields: [
+        { label: "Resource", value: resource.title },
+        { label: "Email", value: email },
+        { label: "Slug", value: slug },
+        { label: "When", value: createdAt },
+      ],
+      footer: "credentia.site/resources",
     });
 
     // Notify by email too (best-effort — never block the download on this).

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
+import { notifySlack } from "../../../lib/slack";
 
 function clean(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -28,6 +29,21 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Ping Slack first and unconditionally: it runs after the response and
+    // never throws, so the message lands in the channel even if the email
+    // below fails.
+    notifySlack({
+      heading: "✉️ New contact message",
+      summary: `Contact: ${subject} from ${name}`,
+      fields: [
+        { label: "Subject", value: subject },
+        { label: "From", value: name },
+        { label: "Email", value: email },
+      ],
+      bodies: [{ label: "Message", value: message }],
+      footer: "credentia.site/contact",
+    });
 
     // Escape before interpolating into email HTML.
     const eName = escapeHtml(name);
