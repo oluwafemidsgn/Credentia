@@ -51,6 +51,7 @@ export default function Footer() {
             {[
               { label: "Home", href: "/" },
               { label: "Blog", href: "/blog" },
+              { label: "NYSC camp guide", href: "/guides/nysc-camp-checklist" },
               { label: "Contribute", href: "/contribute" },
               { label: "Buy us jollof", href: "/jollof" },
               { label: "Contact", href: "/contact" },
