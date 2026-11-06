@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { SanityCategory } from "../../lib/sanity/queries";
+import {
+  applyFilters,
+  defaultFilters,
+  FilterBar,
+  type Filters,
+} from "../components/ChecklistFilters";
 
 /* ─── Browse Card ────────────────────────────────────────── */
 function BrowseCard({
@@ -75,7 +81,9 @@ function BrowseCard({
 }
 
 /* ─── Category Section ───────────────────────────────────── */
-function CategorySection({ id, label, color, textColor, descColor, checklists }: SanityCategory) {
+function CategorySection({ id, label, color, textColor, descColor, checklists }: Omit<SanityCategory, "checklists"> & {
+  checklists: SanityCategory["checklists"];
+}) {
   return (
     <section id={id} className="px-5 sm:px-10 lg:px-20 pb-16 md:pb-24 max-w-[1920px] mx-auto scroll-mt-20">
       <div className="flex items-center justify-between mb-8 md:mb-12">
@@ -111,16 +119,26 @@ function CategorySection({ id, label, color, textColor, descColor, checklists }:
   );
 }
 
-/* ─── Client wrapper: filter pills + sections ────────────── */
+/* ─── Client wrapper: filter pills + filters + sections ──── */
 export default function BrowseClient({ categories }: { categories: SanityCategory[] }) {
   const [active, setActive] = useState<string>("all");
+  const [filters, setFilters] = useState<Filters>(() => defaultFilters("az"));
 
-  const visible = active === "all" ? categories : categories.filter((c) => c.id === active);
+  // Apply the category pill first, then the size/updated filters and the sort
+  // inside each remaining category.
+  const visible = useMemo(() => {
+    const byCategory = active === "all" ? categories : categories.filter((c) => c.id === active);
+    return byCategory
+      .map((c) => ({ ...c, checklists: applyFilters(c.checklists, filters) }))
+      .filter((c) => c.checklists.length > 0);
+  }, [categories, active, filters]);
+
+  const total = visible.reduce((n, c) => n + c.checklists.length, 0);
 
   return (
     <>
-      {/* Filter pills — single-line scroll on mobile, wrap on desktop */}
-      <section className="pb-10 md:pb-16">
+      {/* Category pills — single-line scroll on mobile, wrap on desktop */}
+      <section className="pb-5 md:pb-7">
         <div className="flex md:flex-wrap md:justify-center gap-2 items-center overflow-x-auto px-4 sm:px-8 lg:px-20 pb-1 md:pb-0 scrollbar-none">
           <button
             onClick={() => setActive("all")}
@@ -151,10 +169,43 @@ export default function BrowseClient({ categories }: { categories: SanityCategor
         </div>
       </section>
 
+      {/* Document count / last updated filters + sort */}
+      <section className="pb-10 md:pb-16 px-4 sm:px-8 lg:px-20">
+        <div className="md:flex md:justify-center">
+          <FilterBar
+            filters={filters}
+            onChange={setFilters}
+            defaultSort="az"
+            sorts={["az", "updated", "most"]}
+            total={total}
+          />
+        </div>
+      </section>
+
       {/* Category sections */}
-      {visible.map((cat) => (
-        <CategorySection key={cat.id} {...cat} />
-      ))}
+      {total === 0 ? (
+        <section className="px-5 sm:px-10 lg:px-20 pb-24 max-w-[720px] mx-auto text-center">
+          <div className="bg-[#f4f4f4] rounded-[20px] px-8 py-10">
+            <p
+              className="font-display text-[#232323] tracking-[-0.03em] mb-2"
+              style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)" }}
+            >
+              No checklists match those filters
+            </p>
+            <p className="text-[#9b9b9b] tracking-[-0.02em]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
+              Try a wider document count or a longer time range.
+            </p>
+            <button
+              onClick={() => setFilters(defaultFilters("az"))}
+              className="mt-5 bg-[#232323] hover:bg-[#111] text-white font-medium tracking-[-0.02em] px-5 py-2.5 rounded-full transition-all active:scale-95 text-[13px]"
+            >
+              Clear filters
+            </button>
+          </div>
+        </section>
+      ) : (
+        visible.map((cat) => <CategorySection key={cat.id} {...cat} />)
+      )}
     </>
   );
 }

@@ -11,7 +11,12 @@ import Footer from "../../components/Footer";
 import ChecklistContent from "./ChecklistContent";
 
 export const revalidate = 30;
-import { getChecklistBySlug, getAllChecklistSlugs, getAllBlogPosts } from "../../../lib/sanity/queries";
+import {
+  getChecklistBySlug,
+  getAllChecklistSlugs,
+  getAllBlogPosts,
+  pickChecklistPosts,
+} from "../../../lib/sanity/queries";
 
 export async function generateStaticParams() {
   const slugs = await getAllChecklistSlugs();
@@ -111,11 +116,9 @@ export default async function ChecklistPage({
 
   if (!checklist) notFound();
 
-  // Lead the "From the blog" strip with this checklist's explicitly linked
-  // guide (if any), then backfill with recent posts — deduped, capped at 3.
-  const guide = checklist.relatedGuide;
-  const backfill = allPosts.filter((p) => p.slug !== guide?.slug).slice(0, guide ? 2 : 3);
-  const blogPosts = guide ? [guide, ...backfill] : backfill;
+  // Posts tagged to this checklist first (Related Guide + any post whose CTA
+  // links back here), then the closest on-topic posts to fill the row.
+  const blogPosts = pickChecklistPosts(checklist, allPosts, 3);
 
   return (
     <main className="bg-white overflow-x-hidden pt-[70px]">

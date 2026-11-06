@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "../../../lib/escapeHtml";
+import { notifySlack } from "../../../lib/slack";
 import { getResourceDownload, saveResourceLead } from "../../../lib/sanity/queries";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -18,9 +19,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Something went wrong." }, { status: 400 });
     }
 
+    const name = clean(body.name, 100);
     const email = clean(body.email, 200).toLowerCase();
     const slug = clean(body.slug, 200);
 
+    if (!name) {
+      return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
+    }
     if (!EMAIL_RE.test(email)) {
       return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
     }
@@ -38,10 +43,25 @@ export async function POST(request: NextRequest) {
     // Store the lead. This is the durable record — viewable in Sanity Studio.
     const createdAt = new Date().toISOString();
     await saveResourceLead({
+      name,
       email,
       resourceSlug: slug,
       resourceTitle: resource.title,
       createdAt,
+    });
+
+    // Ping Slack (best-effort — runs after the response, never throws).
+    notifySlack({
+      heading: "📥 New resource download",
+      summary: `Resource download: ${resource.title} by ${name} (${email})`,
+      fields: [
+        { label: "Resource", value: resource.title },
+        { label: "Name", value: name },
+        { label: "Email", value: email },
+        { label: "Slug", value: slug },
+        { label: "When", value: createdAt },
+      ],
+      footer: "credentia.site/resources",
     });
 
     // Notify by email too (best-effort — never block the download on this).
@@ -56,6 +76,7 @@ export async function POST(request: NextRequest) {
             <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color:#232323; font-size:22px; font-weight:600; margin-bottom:16px;">New resource download</h2>
               <div style="background:#f4f4f4; border-radius:12px; padding:20px;">
+                <p style="margin:0 0 12px 0;"><strong>Name:</strong> ${escapeHtml(name)}</p>
                 <p style="margin:0 0 12px 0;"><strong>Email:</strong> ${escapeHtml(email)}</p>
                 <p style="margin:0 0 12px 0;"><strong>Resource:</strong> ${escapeHtml(resource.title)}</p>
                 <p style="margin:0;"><strong>When:</strong> ${escapeHtml(createdAt)}</p>

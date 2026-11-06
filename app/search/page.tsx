@@ -3,57 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import { searchSanity, getCloseMatches, getAllCategories } from "../../lib/sanity/queries";
-import type { SearchChecklist, SearchBlog } from "../../lib/sanity/queries";
+import type { SearchBlog } from "../../lib/sanity/queries";
+import SearchResults, { ResultCard } from "./SearchResults";
 
 export const dynamic = "force-dynamic";
-
-/* ─── Checklist result card (folder style) ───────────────── */
-function ResultCard({ title, slug, category, color, textColor, descColor, count }: SearchChecklist) {
-  return (
-    <Link
-      href={`/checklist/${slug}`}
-      className="relative select-none group block h-[150px] sm:h-[clamp(190px,14vw,240px)]"
-    >
-      <div className="absolute inset-0 transition-all duration-300 ease-out group-hover:-translate-y-2 group-hover:drop-shadow-xl">
-        {/* Tab */}
-        <div
-          className="absolute top-0 left-7 z-10 h-10 flex items-center px-4 rounded-tl-2xl rounded-tr-2xl"
-          style={{ backgroundColor: color }}
-        >
-          <span
-            className="font-medium tracking-wide uppercase whitespace-nowrap"
-            style={{ color: textColor, fontSize: "clamp(9px, 0.75vw, 12px)" }}
-          >
-            {category}
-          </span>
-        </div>
-        {/* Body */}
-        <div
-          className="absolute inset-x-0 top-6 bottom-0 rounded-[20px] overflow-hidden"
-          style={{ backgroundColor: color }}
-        >
-          <div className="absolute bottom-5 left-8 right-8 transition-transform duration-300 group-hover:-translate-y-1.5">
-            <h3
-              className="font-display leading-tight tracking-[-0.04em] mb-2"
-              style={{ color: textColor, fontSize: "clamp(13px, 1.2vw, 18px)" }}
-            >
-              {title}
-            </h3>
-            <p className="tracking-[-0.02em]" style={{ color: descColor, fontSize: "clamp(11px, 0.85vw, 14px)" }}>
-              {count} document{count !== 1 ? "s" : ""}
-            </p>
-            <div className="mt-3 flex items-center gap-1.5 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-              <span className="font-medium" style={{ color: textColor, fontSize: "clamp(11px, 0.8vw, 13px)" }}>
-                View checklist
-              </span>
-              <span style={{ color: textColor }}>→</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 /* ─── Blog result row ────────────────────────────────────── */
 function BlogResult({ title, slug, postType, excerpt, readTime, publishedDate }: SearchBlog) {
@@ -215,24 +168,8 @@ export default async function SearchPage({
           </div>
         )}
 
-        {/* ── Checklist results ─────────────────────────────── */}
-        {checklists.length > 0 && (
-          <section className="mb-16 md:mb-20">
-            <div className="flex items-center justify-between mb-8 md:mb-10">
-              <h2 className="font-medium text-[#232323] tracking-[-0.04em]" style={{ fontSize: "clamp(1.1rem, 1.8vw, 1.75rem)" }}>
-                Checklists
-              </h2>
-              <span className="border border-[#e0e0e0] text-[#232323] font-medium tracking-[-0.02em] px-4 py-2 rounded-full" style={{ fontSize: "clamp(11px, 0.85vw, 14px)" }}>
-                {checklists.length} found
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-              {checklists.map((item) => (
-                <ResultCard key={item.slug} {...item} />
-              ))}
-            </div>
-          </section>
-        )}
+        {/* ── Checklist results (filterable + sortable) ─────── */}
+        {checklists.length > 0 && <SearchResults checklists={checklists} />}
 
         {/* ── Blog results ──────────────────────────────────── */}
         {blogs.length > 0 && (

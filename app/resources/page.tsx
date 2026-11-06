@@ -43,7 +43,7 @@ export default async function ResourcesPage() {
             style={{ fontSize: "clamp(15px, 1.15vw, 19px)" }}
           >
             Printable checklists and guides for the documents you actually need — laid out for
-            paper, so you can pack them and stop scrolling. Pick one, drop your email, and it&apos;s
+            paper, so you can pack them and stop scrolling. Pick one, drop your name and email, and it&apos;s
             yours.
           </p>
         </div>
