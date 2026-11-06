@@ -85,6 +85,12 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         })
+        // Resend RESOLVES with { data: null, error } on API failures (bad key,
+        // rate limit, unverified sending domain) instead of rejecting, so the
+        // catch alone would swallow them silently. Check both.
+        .then((result) => {
+          if (result?.error) console.error("Resource lead email failed:", result.error);
+        })
         .catch((e) => console.error("Resource lead email failed:", e));
     }
 
