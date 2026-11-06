@@ -77,6 +77,7 @@ function ResourceCard({ resource, onDownload }: { resource: SanityResourceCard; 
 
 export default function ResourcesClient({ resources }: { resources: SanityResourceCard[] }) {
   const [active, setActive] = useState<SanityResourceCard | null>(null);
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [status, setStatus] = useState<Status>("idle");
@@ -85,6 +86,7 @@ export default function ResourcesClient({ resources }: { resources: SanityResour
 
   const close = useCallback(() => {
     setActive(null);
+    setFullName("");
     setEmail("");
     setWebsite("");
     setStatus("idle");
@@ -111,7 +113,7 @@ export default function ResourcesClient({ resources }: { resources: SanityResour
       const res = await fetch("/api/resource-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, slug: active.slug, title: active.title, website }),
+        body: JSON.stringify({ name: fullName, email, slug: active.slug, title: active.title, website }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -194,7 +196,7 @@ export default function ResourcesClient({ resources }: { resources: SanityResour
                     Get the resource
                   </h3>
                   <p className="text-[#505050] leading-[1.55]" style={{ fontSize: "clamp(13px, 0.95vw, 15px)" }}>
-                    Enter your email and we&apos;ll unlock <span className="text-[#232323] font-medium">{active.title}</span>. One email, no spam — we only write again if it&apos;s updated.
+                    Tell us your name and email and we&apos;ll unlock <span className="text-[#232323] font-medium">{active.title}</span>. One email, no spam. We only write again if it&apos;s updated.
                   </p>
                 </div>
 
@@ -211,12 +213,25 @@ export default function ResourcesClient({ resources }: { resources: SanityResour
                 />
 
                 <input
-                  type="email"
+                  type="text"
                   required
                   autoFocus
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your full name"
+                  autoComplete="name"
+                  aria-label="Your full name"
+                  className="w-full rounded-full border border-[#e0e0e0] focus:border-[#ccbaf8] focus:ring-2 focus:ring-[#ccbaf8]/40 outline-none px-5 py-3.5 text-[#232323] placeholder:text-[#9b9b9b] transition-all"
+                  style={{ fontSize: "clamp(14px, 1vw, 16px)" }}
+                />
+
+                <input
+                  type="email"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
+                  aria-label="Your email address"
                   className="w-full rounded-full border border-[#e0e0e0] focus:border-[#ccbaf8] focus:ring-2 focus:ring-[#ccbaf8]/40 outline-none px-5 py-3.5 text-[#232323] placeholder:text-[#9b9b9b] transition-all"
                   style={{ fontSize: "clamp(14px, 1vw, 16px)" }}
                 />

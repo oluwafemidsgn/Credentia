@@ -639,6 +639,7 @@ export async function getResourceDownload(
 
 // Records a captured email against the resource it unlocked.
 export async function saveResourceLead(input: {
+  name: string;
   email: string;
   resourceSlug: string;
   resourceTitle: string;
@@ -646,6 +647,7 @@ export async function saveResourceLead(input: {
 }): Promise<void> {
   await writeClient.create({
     _type: "resourceLead",
+    name: input.name,
     email: input.email,
     resourceSlug: input.resourceSlug,
     resourceTitle: input.resourceTitle,

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       summary: `Contact: ${subject} from ${name}`,
       fields: [
         { label: "Subject", value: subject },
-        { label: "From", value: name },
+        { label: "Name", value: name },
         { label: "Email", value: email },
       ],
       bodies: [{ label: "Message", value: message }],

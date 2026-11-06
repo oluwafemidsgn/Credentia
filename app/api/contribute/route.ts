@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       fields: [
         { label: "Checklist", value: f.title },
         { label: "Category", value: f.category || "—" },
-        { label: "From", value: f.name },
+        { label: "Name", value: f.name },
         { label: "Email", value: f.email },
         { label: "Phone", value: f.phone || "—" },
       ],
