@@ -85,59 +85,72 @@ export async function POST(request: NextRequest) {
       Object.entries(f).map(([k, v]) => [k, escapeHtml(v)])
     ) as Fields;
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: "Credentia Contribution <onboarding@resend.dev>",
-      to: "info.dotbranding@gmail.com",
-      subject: `Checklist contribution: ${f.title} — ${f.name}`,
-      replyTo: f.email,
-      html: `
-        <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #232323; font-size: 24px; font-weight: 600; margin-bottom: 16px;">
-            New checklist contribution
-          </h2>
+    // Email is best-effort now that Slack carries the notification. A missing
+    // or rejected RESEND_API_KEY must not cost us the submission, and the
+    // Resend constructor throws outright when the key is absent.
+    if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      resend.emails
+        .send({
+          from: "Credentia Contribution <onboarding@resend.dev>",
+          to: "info.dotbranding@gmail.com",
+          subject: `Checklist contribution: ${f.title} — ${f.name}`,
+          replyTo: f.email,
+          html: `
+            <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #232323; font-size: 24px; font-weight: 600; margin-bottom: 16px;">
+                New checklist contribution
+              </h2>
 
-          <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Checklist:</strong> ${e.title}</p>
-            <p style="margin: 0;"><strong style="color: #232323;">Category:</strong> ${e.category || "—"}</p>
-          </div>
+              <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Checklist:</strong> ${e.title}</p>
+                <p style="margin: 0;"><strong style="color: #232323;">Category:</strong> ${e.category || "—"}</p>
+              </div>
 
-          <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Documents needed:</strong></p>
-            <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.documents}</p>
-          </div>
+              <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Documents needed:</strong></p>
+                <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.documents}</p>
+              </div>
 
-          ${e.steps ? `
-          <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Process / steps:</strong></p>
-            <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.steps}</p>
-          </div>` : ""}
+              ${e.steps ? `
+              <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Process / steps:</strong></p>
+                <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.steps}</p>
+              </div>` : ""}
 
-          ${e.notes ? `
-          <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Extra notes:</strong></p>
-            <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.notes}</p>
-          </div>` : ""}
+              ${e.notes ? `
+              <div style="background: #f4f4f4; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Extra notes:</strong></p>
+                <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.notes}</p>
+              </div>` : ""}
 
-          ${e.story ? `
-          <div style="background: #fdf6e3; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Their story (potential social content):</strong></p>
-            <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.story}</p>
-          </div>` : ""}
+              ${e.story ? `
+              <div style="background: #fdf6e3; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #232323;">Their story (potential social content):</strong></p>
+                <p style="margin: 0; white-space: pre-wrap; color: #505050; line-height: 1.6;">${e.story}</p>
+              </div>` : ""}
 
-          <div style="background: #351459; border-radius: 12px; padding: 20px;">
-            <p style="margin: 0 0 12px 0;"><strong style="color: #ccbaf8;">Credit the contributor:</strong></p>
-            <p style="margin: 0 0 12px 0; color: #ffffff;"><strong>Name:</strong> ${e.name}</p>
-            <p style="margin: 0 0 12px 0; color: #ffffff;"><strong>Email:</strong> ${e.email}</p>
-            <p style="margin: 0; color: #ffffff;"><strong>Phone:</strong> ${e.phone || "—"}</p>
-          </div>
+              <div style="background: #351459; border-radius: 12px; padding: 20px;">
+                <p style="margin: 0 0 12px 0;"><strong style="color: #ccbaf8;">Credit the contributor:</strong></p>
+                <p style="margin: 0 0 12px 0; color: #ffffff;"><strong>Name:</strong> ${e.name}</p>
+                <p style="margin: 0 0 12px 0; color: #ffffff;"><strong>Email:</strong> ${e.email}</p>
+                <p style="margin: 0; color: #ffffff;"><strong>Phone:</strong> ${e.phone || "—"}</p>
+              </div>
 
-          <p style="color: #9b9b9b; font-size: 14px; margin-top: 24px;">
-            Sent from credentia.site/contribute — verify before publishing.
-          </p>
-        </div>
-      `,
-    });
+              <p style="color: #9b9b9b; font-size: 14px; margin-top: 24px;">
+                Sent from credentia.site/contribute — verify before publishing.
+              </p>
+            </div>
+          `,
+        })
+        // Resend RESOLVES with { data: null, error } on API failures (bad key,
+        // rate limit, unverified sending domain) instead of rejecting, so the
+        // catch alone would swallow them silently. Check both.
+        .then((result) => {
+          if (result?.error) console.error("Contribute email failed:", result.error);
+        })
+        .catch((e) => console.error("Contribute email failed:", e));
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
